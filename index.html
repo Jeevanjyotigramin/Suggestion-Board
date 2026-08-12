@@ -1,0 +1,3245 @@
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>      
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --text-primary: #262626;
+            --text-secondary: #8e8e8e;
+            --background: #fafafa;
+            --card-bg: #ffffff;
+            --border: #dbdbdb;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --info: #3498db;
+            --like-active: #e74c3c;
+          	--gradient-color-bg: linear-gradient(180deg, rgba(247, 1, 120, 1) 0%, rgba(160, 8, 156, 1) 51%, rgba(99, 13, 178, 1) 100%);
+          	--transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);           
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            overflow-x: hidden;
+       		 }
+
+            .bill-actions {
+                  display: flex;
+                  gap: 10px;
+                  justify-content: flex-end;
+                  margin-bottom: 20px;
+                  flex-wrap: wrap;
+              }
+
+              .print-bill-btn,
+              .download-bill-btn {
+                  padding: 10px 20px;
+                  border: none;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  font-size: 14px;
+                  font-weight: 500;
+                  transition: all 0.3s ease;
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 5px;
+              }
+
+              .print-bill-btn {
+                  background: #28a745;
+                  color: white;
+              }
+
+              .print-bill-btn:hover {
+                  background: #218838;
+                  transform: translateY(-2px);
+              }
+
+              .download-bill-btn {
+                  background: #007bff;
+                  color: white;
+              }
+
+              .download-bill-btn:hover {
+                  background: #0056b3;
+                  transform: translateY(-2px);
+              }
+      			.printable-bill {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    background: white;
+                }
+                
+                .bill-container {
+                    background: white;
+                }
+                
+                /* Bill Header */
+                .bill-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 20px 0;
+                    border-bottom: 2px solid #333;
+                    margin-bottom: 20px;
+                }
+                
+                .logo-section {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+                
+                .company-logo-placeholder svg {
+                    width: 60px;
+                    height: 60px;
+                }
+                
+                .company-name {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #333;
+                }
+                
+                .company-details {
+                    text-align: right;
+                    font-size: 11px;
+                    color: #666;
+                    line-height: 1.4;
+                }
+                
+                /* Bill Title */
+                .bill-title-section {
+                    text-align: center;
+                    margin-bottom: 25px;
+                }
+                
+              .customer-card h2 {
+                  font-size: 24px;
+                  color: #333;
+                  margin-bottom: 10px;
+                  margin-left: 33.33%;
+                  text-decoration: underline;
+                  }
+                
+                .bill-meta {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 12px;
+                    color: #666;
+                }
+      			.bill-metas {
+                    display: flex;
+                    justify-content: space-around;
+                    font-size: 12px;
+                    color: #666;
+                }
+                
+                /* Customer Section */
+                .customer-section {
+                    margin-bottom: 20px;
+                }
+                
+                .customer-card {
+                    background: #f9f9f9;
+                    padding: 15px;
+                    border-radius: 5px;
+                }
+                
+                .customer-card h3 {
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                }
+                .customer-info {
+                    display: grid;
+  					grid-template-columns: repeat(2, 1fr); /* 2 per row */
+  					gap: 10px;
+      			}
+                .customer-info p {
+                    margin: 5px 0;
+                    font-size: 14px;
+                }
+                
+                /* Bill Table */
+                .bill-table-container {
+                    margin: 20px 0;
+                    overflow-x: auto;
+                }
+                
+                .bill-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 14px;
+                }
+                
+                .bill-table th,
+                .bill-table td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: left;
+                }
+                
+                .bill-table th {
+                    background-color: #f4f4f4;
+                    font-weight: bold;
+                }
+                
+                .amount {
+                    text-align: right;
+                }
+                
+                .subtotal-row td,
+                .total-row td {
+                    background-color: #f9f9f9;
+                }
+                
+                .total-row {
+                    font-size: 16px;
+                }
+                
+                /* Payment Section */
+                .payment-section {
+                    margin: 20px 0;
+                }
+                
+                .payment-card {
+                    background: #f9f9f9;
+                    padding: 15px;
+                    border-radius: 5px;
+                }
+                
+                .payment-card h3 {
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                }
+                
+                .payment-grid {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 5px 0;
+                }
+                
+                .payment-label {
+                    font-weight: bold;
+                }
+                
+                .status-badge {
+                    padding: 2px 8px;
+                    border-radius: 3px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+                
+                .status-complate { background: #d4edda; color: #155724; }
+                .status-pending { background: #fff3cd; color: #856404; }
+                .status-overdue { background: #f8d7da; color: #721c24; }
+                
+                .balance-positive { color: #28a745; font-weight: bold; }
+                .balance-negative { color: #dc3545; font-weight: bold; }
+                
+                /* Footer */
+                .bill-footer {
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #ddd;
+                    display: flex;
+                    justify-content: space-between;
+                }
+                
+                .terms-section {
+                    font-size: 11px;
+                    color: #666;
+                    flex: 1;
+                }
+                
+                .terms-section ul {
+                    margin-left: 20px;
+                    margin-top: 5px;
+                }
+                
+                .signature-section {
+                    text-align: center;
+                    width: 200px;
+                }
+                
+                .signature-line {
+                    border-top: 1px solid #333;
+                    width: 150px;
+                    margin: 20px auto 5px;
+                }
+                
+                .signature-section p {
+                    font-size: 11px;
+                    color: #666;
+                }
+                .jj-progress {
+                  position:fixed; bottom:30px; right:20px; width:50px; height:50px;
+                  background:conic-gradient(#fff 0%, #e6006d 0%); border-radius:50%;
+                  display:none; place-items:center; cursor:pointer; z-index:99;
+                }
+                .jj-progress-value {
+                  width:40px; height:40px; background:var(--gradient-color-bg); border-radius:50%;
+                  display:flex; align-items:center; justify-content:center; color:white;
+                  transition: var(--transition-smooth);
+                }
+                .jj-progress-value:hover { transform: scale(1.1); }
+                
+                @media print {
+                    body {
+                        padding: 0;
+                    }
+                    
+                    .printable-bill {
+                        margin: 0;
+                        padding: 0;
+                    }
+                    
+                    .status-badge {
+                        border: 1px solid #ddd;
+                    }
+                }
+
+                @media (max-width: 600px) {
+                    .bill-header {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+                    
+                    .company-details {
+                        text-align: center;
+                        margin-top: 10px;
+                    }
+                    
+                    .bill-footer {
+                        flex-direction: column;
+                    }
+                    
+                    .signature-section {
+                        margin-top: 20px;
+                        width: 100%;
+                    }
+                }
+        nav.menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-icons {
+              display: flex;
+              gap: 20px;
+          }
+          .nav-icon {
+              font-size: 1.4rem;
+              color: var(--text-primary);
+              cursor: pointer;
+              transition: color 0.2s;
+              position: relative;
+          }
+          .nav-icon:hover {
+              color: var(--primary);
+          }
+          .nav-text {
+              display: none;
+              position: absolute;
+              bottom: -50px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: var(--success);
+              color: white;
+              padding: 4px 8px;
+              font-size: 0.75rem;
+              border-radius: 4px;
+              white-space: nowrap;
+              z-index: 10;
+          }
+      	.nav-icon:hover .nav-text {
+            display: block;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 1001;
+            border: 1px solid var(--border);
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0;
+        }
+
+        .search-input {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            padding: 10px;
+            height: 44px;
+            width: 100%;
+            max-width: 420px;
+            margin: 10px auto;
+            font-size: 14px;
+            background: var(--background);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+      
+        .underline {
+            border-bottom: 1px solid var(--border);
+            width: 100%;
+            display: inline-block;
+        }
+        
+        .search-results {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .user-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .user-avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-bio {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .container {
+            max-width: 935px;
+          	background: var(--background);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .stories-container {
+          	max-width: 865px;
+            background: var(--background);
+            padding: 10px 0;
+            position: fixed;
+            top: 60px;
+            z-index: 99;
+        }
+
+        .stories {
+            display: flex;
+            gap: 20px;
+            padding: 10px 0;
+            overflow-x: auto;
+        }
+
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            min-width: 66px;
+        }
+
+        .story-avatar {
+            width: 66px;
+            height: 66px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px;
+        }
+
+        .story-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 24px;
+        }
+
+        .story-username {
+            font-size: 12px;
+            max-width: 66px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+        .content-area {
+          padding-top: 80px;
+        }
+
+        #home.active + .content-area,
+        .content-area:has(#home.active) {
+            padding-top: 220px;
+        }
+      
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .notice-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .notice-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .notice-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .notice-user {
+            flex: 1;
+        }
+
+        .notice-author {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .notice-category {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .notice-date {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-left: 8px;
+        }
+
+        .notice-content {
+            padding: 0 16px 12px;
+            cursor: pointer;
+        }
+
+        .notice-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .notice-text {
+            line-height: 1.5;
+            font-size: 14px;
+            white-space: pre-line;
+        }
+
+        .notice-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .action-btn.liked {
+            color: var(--like-active);
+        }
+
+        .action-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .comment-container {
+            background: var(--card-bg);
+            padding: 12px 16px;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 8px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .toggle-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            resize: none;
+            min-height: 36px;
+            font-family: inherit;
+        }
+
+        .comment-input:focus {
+            border-color: var(--primary);
+        }
+
+        .post-comment-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .post-comment-btn:hover {
+            background: var(--secondary);
+        }
+
+        .comments-section, .likes-section {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .comment-item {
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.02);
+            margin-bottom: 8px;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .comment-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: flex-end;
+        }
+
+        .comment-action-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 4px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .comment-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .like-user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.02);
+            margin-bottom: 8px;
+        }
+
+        .like-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .like-user-info {
+            flex: 1;
+        }
+
+        .like-user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .like-user-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content.large {
+            max-width: 800px;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+        }
+
+        .modal-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-primary);
+            padding: 0 8px;
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--background);
+            width: 100%;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .auth-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-submit:hover {
+            background: var(--secondary);
+        }
+
+        .auth-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .auth-link {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .otp-input {
+            letter-spacing: 8px;
+            font-size: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .resend-otp {
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: underline;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .resend-otp.disabled {
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .timer {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .additional-data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .data-card {
+            background: var(--background);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .data-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .data-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .settings-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .settings-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .settings-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .settings-content {
+            display: none;
+        }
+
+        .settings-content.active {
+            display: block;
+        }
+
+        .toast {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.info {
+            background: var(--info);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+      
+     /* ========== ADMIN PANEL STYLES - ADD TO EXISTING CSS ========== */
+        .admin-crud-panel {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .admin-tab:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        .admin-tab.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .admin-table th {
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .admin-table tr:hover {
+            background: rgba(102, 126, 234, 0.03);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-sm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(102, 126, 234, 0.2);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .admin-crud-panel {
+                padding: 16px;
+            }
+            .admin-table {
+                font-size: 12px;
+            }
+            .admin-table th,
+            .admin-table td {
+                padding: 8px;
+            }
+            .admin-tab {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 5px;
+            }
+          .nav-icon:hover .nav-text {
+            	display: none;
+        	}
+          .modal {
+                padding: 2px;
+            }
+          .stories-container {
+          	max-width: 100%;
+        	} 
+          .notice-actions {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .additional-data-grid {
+                grid-template-columns: 1fr;
+            }
+    	  .toast {
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            width:80%;
+           }
+          .toast.show {
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+    </style>
+    <nav class="menu">
+        <a href="#" class="logo" onclick="showSection('home')">
+    <img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="35" height="35">
+    <span data-en="Notice Board" data-np="सूचना पाटी">सूचना पाटी</span>
+</a>
+        <div class="nav-controls">
+            <div class="nav-icons">
+                <i class="bx bx-home nav-icon" onclick="showSection('home')">
+                    <span class="nav-text">Home</span>
+                </i>
+                <i class="bx bx-search nav-icon" onclick="toggleSearch()">
+                    <span class="nav-text">Search</span>
+                </i>               	
+              	<i class="bx bx-pencil nav-icon" onclick="showSettings()">
+                    <span class="nav-text">Settings</span>
+                </i>               
+              	<i class="bx bx-file-blank nav-icon"
+                   onclick="showBill()">
+                    <span class="nav-text">Show Bill</span>
+                </i>
+                <i class="bx bx-heart nav-icon" onclick="showSection('liked')">
+                    <span class="nav-text">Liked</span>
+                </i>
+                 <i class="bx bx-globe nav-icon" onclick="toggleLanguage()">
+                    <span class="nav-text">Language</span>
+                </i>
+            </div>
+            <div class="user-auth" id="userAuth">
+                <div id="guestView">
+                    <i class="bx bx-log-in-circle nav-icon" onclick="showLoginForm()"></i>                  	
+                </div>
+                <div id="userView" style="display: none;">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar" onclick="toggleUserDropdown()">U</div>
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="dropdown-item" onclick="showSection('liked')"><i class="bx bx-heart"></i> <span data-en="Liked" data-np="मनपराएका">मनपराएका</span></div>
+                          	<div class="dropdown-item" id="adminuser" onclick="showAdminPanel()"><i class="bx bx-user-circle"></i> <span data-en="Admin" data-np="ब्यावस्थापक">ब्यावस्थापक</span></div>
+                            <div class="dropdown-item" onclick="showSettings()"><i class="bx bx-cog"></i> <span data-en="Settings" data-np="सेटिङ्ग">सेटिङ्ग</span></div>
+                            <div class="dropdown-item" onclick="showBill()"><i class="bx bx-data"></i> <span data-en="current E-Bill" data-np="हालकाे बिल">हालकाे बिल</span> </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="toggleLanguage()"><i class="bx bx-globe"></i> <span id="languageText" data-en="Switch to Nepali" data-np="Switch to English">Switch to English</span></div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="logout()"><i class="bx bx-log-out"></i> <span data-en="Log Out" data-np="लगआउट">लगआउट</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal" id="searchContainer">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"><span data-en="Search notices" data-np="सूचना खोजी गर्नुहोस्">सूचना खोजी गर्नुहोस्</span></div>
+                <button class="close-modal" onclick="toggleSearch()">×</button>
+            </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search notices..." data-en-placeholder="Search notices..." data-np-placeholder="सूचना खोज्नुहोस्..."  oninput="handleSearch()">
+            <div class="underline"></div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+	<div class="modal" id="adminContainer">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"><span data-en="Add notice" data-np="सूचना थप्नुहोस्">सूचना थप्नुहोस्</span></div>
+                <button class="close-modal" onclick="toggleadmin()">×</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-area">
+            <div id="home" class="content-section active">
+               <div class="stories-container">
+            		<div class="stories" id="storiesContainer"></div>
+        		</div>
+                <div class="feed" id="feedContainer"></div>
+            </div>
+          
+            <div id="liked" class="content-section">
+                <div class="feed tops" id="likedContainer"></div>
+            </div> 
+          	<div id="billdata" class="content-section">
+                <div class="feed tops" id="billdataContainer"></div>
+            </div>
+          
+            <div id="settings" class="content-section">
+                <div class="settings-tabs tops">
+                    <div class="settings-tab active" data-tab="profile" onclick="changeSettingsTab('profile')"><span data-en="Edit Profile" data-np="प्रोफाइल सम्पादन">प्रोफाइल सम्पादन</span></div>
+                    <div class="settings-tab" data-tab="password" onclick="changeSettingsTab('password')"><span data-en="Change Password" data-np="पासवर्ड परिवर्तन">पासवर्ड परिवर्तन</span></div>
+                </div>
+                <div id="profileSettings" class="settings-content active">
+                    <form class="auth-form" id="editProfileForm" onsubmit="handleEditProfile(event)">
+                        <div class="form-group">
+                            <label class="form-label" data-en="Full Name" data-np="पूरा नाम">पूरा नाम</label>
+                            <input type="text" class="form-input" id="editProfileName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-en="Email" data-np="इमेल">इमेल</label>
+                            <input type="email" class="form-input" id="editProfileEmail" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-en="Costomer id" data-np="ग्रहाक नं.">ग्रहाक नं.</label>
+                            <input type="text" class="form-input" id="editProfileCitizenship">
+                        </div>
+                        <button type="submit" class="auth-submit" data-en="Update Profile" data-np="प्रोफाइल अपडेट गर्नुहोस्">प्रोफाइल अपडेट गर्नुहोस्</button>
+                    </form>
+                </div>
+                <div id="passwordSettings" class="settings-content">
+                    <form class="auth-form" id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                        <div class="form-group">
+                            <label class="form-label"data-en="Current Password" data-np="हालको पासवर्ड">हालको पासवर्ड</label>
+                            <input type="password" class="form-input" id="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-en="New Password" data-np="नयाँ पासवर्ड">नयाँ पासवर्ड</label>
+                            <input type="password" class="form-input" id="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-en="Confirm New Password" data-np="नयाँ पासवर्ड पुष्टि गर्नुहोस्">नयाँ पासवर्ड पुष्टि गर्नुहोस्</label>
+                            <input type="password" class="form-input" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="auth-submit" data-en="Change Password" data-np="पासवर्ड परिवर्तन गर्नुहोस्">पासवर्ड परिवर्तन गर्नुहोस्</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- ========== ADMIN PANEL SECTION - PASTE THIS INSIDE <body> AFTER SETTINGS DIV ========== -->
+<div id="adminPanel" class="content-section">
+    <div class="admin-crud-panel">
+        <div class="admin-tabs">
+            <div class="admin-tab active" data-tab="notices" onclick="switchAdminTab('notices')">
+                <i class="bx bx-news"></i> 📢Notices
+            </div>
+            <div class="admin-tab" data-tab="categories" onclick="switchAdminTab('categories')">
+                <i class="bx bx-category"></i> 🏷️Categories
+            </div>
+        </div>
+        
+        <!-- Notices Management Panel -->
+        <div id="adminNoticesPanel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color: var(--primary);"><i class="bx bx-bell"></i> All Notices</h3>
+                <button class="btn-primary btn-sm" onclick="openNoticeModal()" style="background: var(--success);">
+                    <i class="bx bx-plus"></i> Add New Notice
+                </button>
+            </div>
+            <div style="overflow-x: auto; border-radius: 12px; border: 1px solid var(--border);">
+                <table class="admin-table" id="noticesTable">
+                    <thead>
+                        <tr><th>ID</th><th>Title (Nepali)</th><th>Title (English)</th><th>Status</th><th style="width: 120px;">Actions</th</tr>
+                    </thead>
+                    <tbody id="noticesTableBody">
+                        <tr><td colspan="7" style="text-align: center; padding: 40px;"><div class="spinner"></div> Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Categories Management Panel -->
+        <div id="adminCategoriesPanel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color: var(--primary);"><i class="bx bx-category"></i> Categories</h3>
+                <button class="btn-primary btn-sm" onclick="openCategoryModal()" style="background: var(--success);">
+                    <i class="bx bx-plus"></i> Add New Category
+                </button>
+            </div>
+            <div style="overflow-x: auto; border-radius: 12px; border: 1px solid var(--border);">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID</th><th>Name (Nepali)</th><th>Name (English)</th><th>Status</th><th style="width: 120px;">Actions</th</tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <tr><td colspan="7" style="text-align: center; padding: 40px;"><div class="spinner"></div> Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== NOTICE MODAL - PASTE THIS WITH OTHER MODALS ========== -->
+<div id="noticeModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <div class="modal-title" id="noticeModalTitle"><i class="bx bx-edit-alt"></i> Add/Edit Notice</div>
+            <button class="close-modal" onclick="closeModal('noticeModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="noticeForm" onsubmit="saveNotice(event)">
+                <input type="hidden" id="noticeId">
+                <div class="form-group">
+                    <label><i class="bx bx-text"></i> Title (Nepali) <span style="color: red;">*</span></label>
+                    <input type="text" id="title_np" class="form-input" placeholder="नेपालीमा शीर्षक" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-text"></i> Title (English) <span style="color: red;">*</span></label>
+                    <input type="text" id="title_en" class="form-input" placeholder="Title in English" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-file-blank"></i> Content (Nepali) <span style="color: red;">*</span></label>
+                    <textarea id="content_np" rows="5" class="form-input" placeholder="नेपालीमा सामग्री" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-file-blank"></i> Content (English) <span style="color: red;">*</span></label>
+                    <textarea id="content_en" rows="5" class="form-input" placeholder="Content in English" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-category"></i> Category</label>
+                    <select id="category_id" class="form-input" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-toggle-left"></i> Status</label>
+                    <select id="notice_status" class="form-input">
+                        <option value="active">✅ Active</option>
+                        <option value="inactive">⭕ Inactive</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn-sm" style="background: #ccc;" onclick="closeModal('noticeModal')">Cancel</button>
+                    <button type="submit" class="btn-primary btn-sm"><i class="bx bx-save"></i> Save Notice</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== CATEGORY MODAL - PASTE THIS WITH OTHER MODALS ========== -->
+<div id="categoryModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <div class="modal-title"><i class="bx bx-category"></i> Add/Edit Category</div>
+            <button class="close-modal" onclick="closeModal('categoryModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="categoryForm" onsubmit="saveCategory(event)">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label><i class="bx bx-text"></i> Name (Nepali) <span style="color: red;">*</span></label>
+                    <input type="text" id="cat_name_np" class="form-input" placeholder="नेपालीमा नाम" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-text"></i> Name (English) <span style="color: red;">*</span></label>
+                    <input type="text" id="cat_name_en" class="form-input" placeholder="Name in English" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-image"></i> Icon (Boxicons class)</label>
+                    <input type="text" id="cat_icon" class="form-input" value="bx bx-category" placeholder="bx bx-category">
+                    <small style="color: var(--text-secondary);">Examples: bx bx-news, bx bx-bulb, bx bx-calendar</small>
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-palette"></i> Color</label>
+                    <input type="color" id="cat_color" class="form-input" value="#667eea" style="height: 45px;">
+                </div>
+                <div class="form-group">
+                    <label><i class="bx bx-toggle-left"></i> Status</label>
+                    <select id="cat_status" class="form-input">
+                        <option value="active">✅ Active</option>
+                        <option value="inactive">⭕ Inactive</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn-sm" style="background: #ccc;" onclick="closeModal('categoryModal')">Cancel</button>
+                    <button type="submit" class="btn-primary btn-sm"><i class="bx bx-save"></i> Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <div class="modal" id="noticeDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-en="Notice Detail" data-np="सूचना विवरण">सूचना विवरण</div>
+                <button class="close-modal" onclick="closeNoticeDetailModal()">×</button>
+            </div>
+            <div class="modal-body" id="noticeDetailContent"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-en="Log In" data-np="लगइन गर्नुहोस्">लगइन गर्नुहोस्</div>
+                <button class="close-modal" onclick="closeLoginModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <input type="email" class="form-input" id="loginEmail" placeholder="Email" data-en-placeholder="Email" data-np-placeholder="इमेल" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-input" id="loginPassword" placeholder="Password" data-en-placeholder="Password" data-np-placeholder="पासवर्ड" required>
+                    </div>
+                    <button type="submit" class="auth-submit" data-en="Log In" data-np="लगइन गर्नुहोस्">लगइन गर्नुहोस्</button>
+                </form>
+                <div class="auth-switch">
+                    <span data-en="Don't have an account?" data-np="खाता छैन?">खाता छैन?</span>
+                    <span class="auth-link" onclick="showRegisterForm()" data-en="Sign up" data-np="साइन अप गर्नुहोस्">साइन अप गर्नुहोस्</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" data-en="Sign up" data-np="साइन अप गर्नुहोस्">साइन अप गर्नुहोस्</div>
+                <button class="close-modal" onclick="closeRegisterModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="registerStep1">
+                    <form class="auth-form" id="registerForm" onsubmit="handleRegisterStep1(event)">
+                        <div class="form-group">
+                            <input type="text" class="form-input" id="registerName" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" id="registerEmail" placeholder="Email" data-en-placeholder="Email" data-np-placeholder="इमेल" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" id="registerCitizenship" placeholder="Costomer No." ata-en-placeholder="Costomer No." data-np-placeholder="ग्राहक नं." >
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-input" id="registerPassword" placeholder="Password" data-en-placeholder="Password" data-np-placeholder="पासवर्ड" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-input" id="registerConfirmPassword" placeholder=" Confirm Password" data-en-placeholder=" Confirm Password" data-np-placeholder="नयाँ पासवर्ड पुष्टि गर्नुहोस्" required>
+                        </div>
+                        <button type="submit" class="auth-submit" id="sendOtpBtn" data-en="Send OTP" data-np="OTP पठाउनुहोस्">OTP पठाउनुहोस्</button>
+                    </form>
+                    <div class="auth-switch">
+                        <span data-en="Already have an account?" data-np="पहिले नै खाता छ?">पहिले नै खाता छ?</span>
+                        <span class="auth-link" onclick="showLoginForm()" data-en="Log In" data-np="लगइन गर्नुहोस्">लगइन गर्नुहोस्</span>
+                    </div>
+                </div>
+                <div id="registerStep2" style="display: none;">
+                    <div class="auth-form">
+                        <div class="form-group">
+                            <label class="form-label" data-en="Email" data-np="इमेल">इमेल</label>
+                            <input type="email" class="form-input" id="verifiedEmail" readonly disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-en="Enter OTP" data-np="otp हाल्नुहोस्">otp हाल्नुहोस्</label>
+                            <input type="text" class="form-input otp-input" id="otpInput" placeholder="enter at least 6 number otp" maxlength="6" required>
+                        </div>
+                        <div class="timer" id="otpTimer">10:00 remaining</div>
+                        <button class="auth-submit" id="verifyOtpBtn" onclick="verifyOTP()" data-en="Verify OTP" data-np="OTP प्रमाणित गर्नुहोस्" >OTP प्रमाणित गर्नुहोस्</button>
+                        <div class="resend-otp" id="resendOtp" onclick="resendOTP()" data-en="Resend OTP" data-np="OTP पुन: पठाउनुहोस्" >OTP पुन: पठाउनुहोस्</div>
+                        <div class="auth-switch" style="margin-top: 10px;">
+                            <span class="auth-link" onclick="backToRegisterStep1()" data-en="← Back" data-np="← पछाडि">← पछाडि</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="additionalDataModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+              <div class="modal-title">Electricity Bill</div>
+                <button class="close-modal" onclick="closeAdditionalDataModal()">×</button>
+            </div>
+            <div class="modal-body" id="additionalDataContent">
+                <div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editCommentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Edit Comment</div>
+                <button class="close-modal" onclick="closeEditCommentModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form class="auth-form" id="editCommentForm" onsubmit="handleEditComment(event)">
+                    <input type="hidden" id="editCommentId">
+                    <input type="hidden" id="editCommentNoticeId">
+                    <div class="form-group">
+                        <textarea class="form-input" id="editCommentText" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="auth-submit">Update Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+	<div class="jj-progress" id="progress"><span class="jj-progress-value" id="progress-value"><i class='bx bxs-chevrons-up'></i></span></div>
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbz3kUwVSqFcJb3nTecF_qXI6bFFSDmRCKbVzk0__nH6ig4-Ed5c56nyka9sSYKBUEfE/exec';
+
+        let currentLanguage = 'np';
+        let currentUser = null;
+        let sessionToken = null;
+        let cachedData = { notices: [], categories: [], likes: [], comments: [], users: [] };
+        let dataLoaded = false;
+        let pendingNoticeId = null;
+        let activeCommentId = null;
+        let otpTimer = null;
+        let registrationData = { name: '', email: '', password: '', citizenshipNo: '' };
+
+        function decodeText(text) {
+            if (!text) return '';
+            return text.replace(/\+/g, ' ');
+        }
+      
+        function formatDateTime(dateString) {
+          if (!dateString) return '';
+          const dateObj = new Date(dateString);
+          if (isNaN(dateObj.getTime())) return dateString;
+
+          const year = dateObj.getFullYear();
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const day = String(dateObj.getDate()).padStart(2, '0');
+
+          let hours = dateObj.getHours();
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          hours = hours % 12;
+          hours = hours ? hours : 12;  // 0 -> 12
+
+          const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+          const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+
+          return `${year}-${month}-${day} ${String(hours).padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+        }       
+      
+      function formatDate(timestamp) {
+            if (!timestamp) return '';
+            const date = new Date(timestamp);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+      
+      function formatTimeAgo(timestamp) {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return '';
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) {
+        return currentLanguage === 'np' ? 'अहिले मात्र' : 'Just now';
+    }
+    if (diffMins < 60) {
+        let num = diffMins;
+        if (currentLanguage === 'np') num = num.toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        return currentLanguage === 'np' ? `${num} मिनेट अगाडि` : `${num} m ago`;
+    }
+    if (diffMins < 1440) {
+        const hours = Math.floor(diffMins / 60);
+        let h = hours;
+        if (currentLanguage === 'np') h = h.toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        return currentLanguage === 'np' ? `${h} घण्टा अगाडि` : `${h} h ago`;
+    }
+    if (diffMins < 10080) {
+        const days = Math.floor(diffMins / 1440);
+        let d = days;
+        if (currentLanguage === 'np') d = d.toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        return currentLanguage === 'np' ? `${d} दिन अगाडि` : `${d} d ago`;
+    }
+    if (diffMins < 43200) {
+        const weeks = Math.floor(diffMins / 10080);
+        let w = weeks;
+        if (currentLanguage === 'np') w = w.toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        return currentLanguage === 'np' ? `${w} हप्ता अगाडि` : `${w} week ago`;
+    }
+    if (diffMins < 525600) {
+        const months = Math.floor(diffMins / 43200);
+        let m = months;
+        if (currentLanguage === 'np') m = m.toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        return currentLanguage === 'np' ? `${m} महिना अगाडि` : `${m} month ago`;
+    }
+    // Year or older
+    if (currentLanguage === 'np') {
+        const year = date.getFullYear().toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        const month = (date.getMonth() + 1).toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);
+        const day = date.getDate().toString().replace(/\d/g, d => '०१२३४५६७८९'[d]);  // fixed +1 bug
+        return `${year}-${month}-${day}`;
+    }
+    return date.toLocaleDateString('en-CA');  // YYYY-MM-DD
+}
+        function playSuccess() { try { new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3').play().catch(() => {}); } catch(e) {} }
+        function playFailure() { try { new Audio('https://www.soundjay.com/misc/sounds/failure-drum-01.mp3').play().catch(() => {}); } catch(e) {} }
+        function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkUserAuth();
+            loadInitialData();
+            if (window.location.hash) {
+                const noticeId = window.location.hash.replace('#notice-', '');
+                if (noticeId) {
+                  if (dataLoaded) {
+                    showNoticeDetail(noticeId);
+                  } else {
+                    pendingNoticeId = noticeId;
+                  }
+                }
+            }
+        });
+
+        function checkUserAuth() {
+            const userData = localStorage.getItem('currentUser');
+            const token = localStorage.getItem('sessionToken');
+            if (userData && token) {
+                try { currentUser = JSON.parse(userData); sessionToken = token; updateUserUI(); return true; } catch(e) { clearSession(); }
+            }
+            return false;
+        }
+
+        function updateUserUI() {
+            const guestView = document.getElementById('guestView');
+            const userView = document.getElementById('userView');
+            const userAvatar = document.getElementById('userAvatar');
+            if (currentUser) {
+                guestView.style.display = 'none';
+                userView.style.display = 'flex';
+                userAvatar.textContent = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
+            } else {
+                guestView.style.display = 'block';
+                userView.style.display = 'none';
+            }
+        }
+      
+      	function updateUserUI() {
+            const guestView = document.getElementById('guestView');
+            const userView = document.getElementById('userView');
+            const userAvatar = document.getElementById('userAvatar');
+            const adminUser = document.getElementById('adminuser');
+            if (currentUser) {
+                guestView.style.display = 'none';
+                userView.style.display = 'flex';
+                userAvatar.textContent = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
+                adminUser.style.display = (currentUser.role === 'admin') ? 'block' : 'none';
+            } else {
+                guestView.style.display = 'block';
+                userView.style.display = 'none';
+                adminUser.style.display = 'none';
+            }
+        }
+
+        function clearSession() { localStorage.removeItem('currentUser'); localStorage.removeItem('sessionToken'); currentUser = null; sessionToken = null; updateUserUI(); }
+
+        async function apiRequest(action, data = {}) {
+            try {
+                if (sessionToken) data.sessionToken = sessionToken;
+                const formData = new URLSearchParams();
+                formData.append('action', action);
+                for (const [key, value] of Object.entries(data)) if (value !== null && value !== undefined) formData.append(key, value);
+                const response = await fetch(API_URL, { method: 'POST', body: formData, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+                const text = await response.text();
+                return JSON.parse(text);
+            } catch (error) { showToast('Network error: ' + error.message, 'error'); return { success: false, message: error.message }; }
+        }
+
+        // Load Data
+        async function loadAllData() {
+            try {
+                const result = await apiRequest('getAllData', { language: currentLanguage });
+                
+                if (result && result.success) {
+                    cachedData = {
+                        notices: (result.notices || []).map(notice => ({
+                            ...notice,
+                            display_title: decodeText(notice.display_title),
+                            display_content: decodeText(notice.display_content),
+                            author: decodeText(notice.author),
+                            formatted_date: notice.timestamp ? formatTimeAgo(notice.timestamp) : ''
+                        })),
+                        categories: (result.categories || []).map(cat => ({
+                            ...cat,
+                            display_name: decodeText(cat.display_name)
+                        })),
+                        likes: (result.likes || []),
+                        comments: (result.comments || []).map(comment => ({
+                            ...comment,
+                            comment: decodeText(comment.comment),
+                            user_name: decodeText(comment.user_name)
+                        })),
+                        users: (result.users || []).map(user => ({
+                            ...user,
+                            name: decodeText(user.name),
+                            email: decodeText(user.email)
+                        }))
+                    };
+                    
+                    dataLoaded = true;
+                    
+                    // Check pending notice
+                    if (pendingNoticeId) {
+                        const notice = cachedData.notices.find(n => n.notice_id.toString() === pendingNoticeId.toString());
+                        if (notice) {
+                          showNoticeDetail(pendingNoticeId);
+                          pendingNoticeId = null;
+                        }
+                    }
+                    
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                return false;
+            }
+        }
+
+
+        async function loadInitialData() { await loadAllData(); loadStories(); loadFeed(); }
+
+        function toggleLanguage() { currentLanguage = currentLanguage === 'en' ? 'np' : 'en'; playSuccess(); showToast(currentLanguage === 'en' ? 'Language changed to English' : 'भाषा नेपालीमा परिवर्तन भयो', 'success'); loadAllData().then(() => { updateLanguage(); loadStories(); loadFeed(); }); showSection('home');}
+      
+      function updateLanguage() {
+            document.querySelectorAll('[data-np], [data-en]').forEach(element => {
+                if (element.hasAttribute(`data-${currentLanguage}`)) {
+                    const newText = element.getAttribute(`data-${currentLanguage}`);
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        const placeholderAttr = `data-${currentLanguage}-placeholder`;
+                        if (element.hasAttribute(placeholderAttr)) {
+                            element.placeholder = element.getAttribute(placeholderAttr);
+                        }
+                    } else {
+                        element.textContent = newText;
+                    }
+                }
+            });
+
+            const languageText = document.getElementById('languageText');
+            if (languageText) {
+                languageText.textContent = currentLanguage === 'np' ? 'Switch to English' : 'नेपालीमा स्विच गर्नुहोस्';
+            }
+        }
+
+        function toggleUserDropdown() { document.getElementById('userDropdown').classList.toggle('show'); }
+        document.addEventListener('click', (e) => { if (!e.target.closest('.user-profile')) document.getElementById('userDropdown').classList.remove('show'); });
+      
+      document.addEventListener('click', function(e) {
+        if (activeCommentId) {
+          const section = document.getElementById(`comment-section-${activeCommentId}`);
+          if (section && !section.contains(e.target)) {
+            section.style.display = 'none';
+            activeCommentId = null;
+          }
+        }
+      });     
+      
+        function isAndroidWebView() {
+            return /Android/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent);
+        }
+
+        async function downloadBillAsPDF(billId) {
+            const billElement = document.getElementById(billId);
+            if (!billElement) {
+                showToast('Bill element not found!', 'error');
+                return;
+            }
+
+            const cosid = currentUser?.citizenship_no || 'bill';
+            showToast('Generating PDF...', 'info');
+
+            try {
+                if (typeof html2pdf === 'undefined') {
+                    await loadHtml2Pdf();
+                }
+
+                const opt = {
+                    margin: [0.2, 0.2, 0.2, 0.2],
+                    filename: `${cosid}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2, 
+                        letterRendering: true,
+                        useCORS: true
+                    },
+                    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+                };
+
+                // Generate PDF as data URL
+                const pdf = await html2pdf().set(opt).from(billElement).output('datauristring');
+
+                // Check if in Android WebView
+                if (isAndroidWebView()) {
+                    // Send PDF data to Android
+                    if (window.AndroidInterface) {
+                        window.AndroidInterface.downloadPDF(pdf, `${cosid}.pdf`);
+                        showToast('PDF download started!', 'success');
+                    } else {
+                        // Fallback: try normal download
+                        downloadPDFFallback(pdf, `${cosid}.pdf`);
+                    }
+                } else {
+                    // Normal browser download
+                    downloadPDFFallback(pdf, `${cosid}.pdf`);
+                    showToast('PDF downloaded successfully!', 'success');
+                }
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                showToast('Failed to generate PDF. Please try printing instead.', 'error');
+            }
+        }
+
+        // Fallback download method
+        function downloadPDFFallback(dataUrl, filename) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = filename;
+            link.click();
+        }
+
+        // Load html2pdf library
+        function loadHtml2Pdf() {
+            return new Promise((resolve, reject) => {
+                if (typeof html2pdf !== 'undefined') {
+                    resolve();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+                script.onload = resolve;
+                script.onerror = () => {
+                    // Try fallback CDN
+                    const fallbackScript = document.createElement('script');
+                    fallbackScript.src = 'https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js';
+                    fallbackScript.onload = resolve;
+                    fallbackScript.onerror = reject;
+                    document.head.appendChild(fallbackScript);
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+          // Helper function to format currency
+          function formatCurrency(value) {
+              if (!value || value === '') return '0';
+              const num = parseFloat(value);
+              if (isNaN(num)) return value;
+              return '₨. ' + num.toFixed(2);
+          }
+
+          // Helper function to get status class
+          function getStatusClass(status) {
+              if (!status) return 'status-pending';
+              const statusLower = status.toLowerCase();
+              if (statusLower.includes('complate')) return 'status-complate';
+              if (statusLower.includes('pending')) return 'status-pending';
+              if (statusLower.includes('overdue')) return 'status-overdue';
+              return 'status-pending';
+          }
+
+          // Helper function to get balance class
+          function getBalanceClass(balance) {
+              if (!balance || balance === '') return '';
+              const num = parseFloat(balance);
+              if (isNaN(num)) return '';
+              return num > 0 ? 'balance-positive' : (num < 0 ? 'balance-negative' : '');
+          }
+      
+          // progress
+        const progress = document.getElementById('progress');
+        window.addEventListener('scroll', () => {
+          let pos = document.documentElement.scrollTop;
+          let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          let scrollValue = Math.round((pos * 100) / calcHeight);
+          if (pos > 200) progress.style.display = 'grid'; else progress.style.display = 'none';
+          progress.style.background = `conic-gradient(#fff ${scrollValue}%, #e6006d ${scrollValue}%)`;
+        });
+
+        if(progress) {
+          progress.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+      
+        function closeAdditionalDataModal() { document.getElementById('additionalDataModal').classList.remove('active'); }
+        function showLoginForm() { closeRegisterModal(); document.getElementById('loginModal').classList.add('active'); }
+        function closeLoginModal() { document.getElementById('loginModal').classList.remove('active'); }
+        function showRegisterForm() { closeLoginModal(); document.getElementById('registerStep1').style.display = 'block'; document.getElementById('registerStep2').style.display = 'none'; document.getElementById('registerForm').reset(); document.getElementById('registerModal').classList.add('active'); }
+        function closeRegisterModal() { document.getElementById('registerModal').classList.remove('active'); if (otpTimer) clearInterval(otpTimer); document.getElementById('registerStep1').style.display = 'block'; document.getElementById('registerStep2').style.display = 'none'; }
+        function backToRegisterStep1() { document.getElementById('registerStep1').style.display = 'block'; document.getElementById('registerStep2').style.display = 'none'; if (otpTimer) clearInterval(otpTimer); }
+        function closeNoticeDetailModal() { document.getElementById('noticeDetailModal').classList.remove('active'); }
+        function closeEditCommentModal() { document.getElementById('editCommentModal').classList.remove('active'); }
+
+      	 async function showNoticeDetail(noticeId, event) {
+            // Stop propagation if event exists
+            if (event) event.stopPropagation();
+
+            const notice = cachedData.notices.find(n => n.notice_id.toString() === noticeId.toString());
+            if (!notice) {
+                showToast('Notice not found', 'error');
+                return;
+            }
+            // Get the view count element if it exists (for card view)
+            const viewCountSpan = document.getElementById(`view-count-${noticeId}`);
+            const originalViewCount = viewCountSpan ? parseInt(viewCountSpan.textContent) || 0 : (notice.views || 0);
+
+            // Optimistically update UI in the card
+            if (viewCountSpan) {
+                viewCountSpan.textContent = originalViewCount + 1;
+            }
+            const updatedViewCount = (notice.views || 0) + 1;
+           	closeCommentSection(noticeId);
+           // Update hash
+            window.location.hash = `notice-${noticeId}`;
+            // Generate and show modal
+            const container = document.getElementById('noticeDetailContent');
+            if (container) {
+                container.innerHTML = await generateNoticeDetailHTML(notice);
+                const modal = document.getElementById('noticeDetailModal');
+                if (modal) modal.classList.add('active');
+                updateLanguage();
+            }
+
+            try {
+                // Update server
+                const result = await apiRequest('incrementView', { noticeId });
+                if (result && result.success) {
+                    // Update cached data
+                    notice.views = updatedViewCount;
+                } else {
+                    // Revert on failure
+                    if (viewCountSpan) {
+                        viewCountSpan.textContent = originalViewCount;
+                    }
+                    showToast('Failed to track view', 'error');
+                }
+            } catch (error) {
+                // Revert on error
+                if (viewCountSpan) {
+                    viewCountSpan.textContent = originalViewCount;
+                }
+                if (error.name !== 'AbortError') {
+                    showToast('Error: ' + error.message, 'error');
+                }
+            }            
+        }
+      function toggleSearch() { const sc = document.getElementById('searchContainer'); sc.classList.toggle('active'); if (sc.classList.contains('active')) document.getElementById('searchInput').focus(); else { document.getElementById('searchInput').value = ''; document.getElementById('searchResults').innerHTML = ''; } }
+        
+      let searchTimeout;      
+        function handleSearch() { clearTimeout(searchTimeout); searchTimeout = setTimeout(() => { const query = document.getElementById('searchInput').value.trim().toLowerCase(); const container = document.getElementById('searchResults'); if (!query) { container.innerHTML = ''; return; } const results = cachedData.notices.filter(n => (n.display_title || '').toLowerCase().includes(query) || (n.display_content || '').toLowerCase().includes(query) || (n.author || '').toLowerCase().includes(query)).slice(0, 20); displaySearchResults(results); }, 500); }
+        
+      function displaySearchResults(notices) { const container = document.getElementById('searchResults'); if (notices.length === 0) { container.innerHTML = '<div class="empty-state">No notices found</div>'; return; } let html = ''; notices.forEach(n => { html += `<div class="user-item" onclick="showNoticeDetail('${n.notice_id}')"><div class="user-avatar-sm">${n.author ? n.author.charAt(0).toUpperCase() : 'U'}</div><div class="user-info"><div class="username">${escapeHtml(n.display_title || 'Untitled')}</div><div class="user-bio">By ${escapeHtml(n.author || 'Unknown')} • ${n.formatted_date || ''}</div></div></div>`; }); container.innerHTML = html; }
+
+        async function handleLogin(e) { e.preventDefault(); const email = document.getElementById('loginEmail').value; const password = document.getElementById('loginPassword').value; if (!email || !password) { playFailure(); showToast('Please fill all fields', 'error'); return; } const btn = e.target.querySelector('button'); const original = btn.textContent; btn.disabled = true; btn.textContent = 'Loading...'; try { const result = await apiRequest('login', { loginInput: email, password }); if (result && result.success) { currentUser = result.user; sessionToken = 'session_' + Date.now(); localStorage.setItem('currentUser', JSON.stringify(currentUser)); localStorage.setItem('sessionToken', sessionToken); updateUserUI(); closeLoginModal(); playSuccess(); showToast('Successfully logged in', 'success'); await loadAllData(); loadFeed(); } else { playFailure(); showToast(result?.message || 'Login failed', 'error'); } } catch (error) { playFailure(); showToast('Login error: ' + error.message, 'error'); } finally { btn.disabled = false; btn.textContent = original; } }
+
+        async function handleRegisterStep1(e) { 
+            e.preventDefault(); 
+
+            // Get form values
+            const name = document.getElementById('registerName').value.trim(); 
+            const email = document.getElementById('registerEmail').value.trim(); 
+            const citizenshipNo = document.getElementById('registerCitizenship').value.trim(); 
+            const password = document.getElementById('registerPassword').value; 
+            const confirm = document.getElementById('registerConfirmPassword').value; 
+
+            // Check required fields
+            if (!name || !email || !password || !confirm) { 
+                playFailure(); 
+                showToast('Please fill all required fields', 'error'); 
+                return; 
+            }     
+            // Check if passwords match
+            if (password !== confirm) { 
+                playFailure(); 
+                showToast('Passwords do not match', 'error'); 
+                return; 
+            }     
+            // Combined password validation: minimum 8 characters, at least one letter, one number, and one special character
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/;
+
+            if (!passwordRegex.test(password)) { 
+                playFailure(); 
+                showToast('Password must be at least 8 characters and contain at least one letter, one number, and one special character', 'error'); 
+                return; 
+            }     
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+            if (!emailRegex.test(email)) { 
+                playFailure(); 
+                showToast('Invalid email format', 'error'); 
+                return; 
+            }     
+            // Get button and disable it
+            const btn = document.getElementById('sendOtpBtn'); 
+            const original = btn.textContent; 
+            btn.disabled = true; 
+            btn.textContent = 'Sending OTP...'; 
+
+            try { 
+                const result = await apiRequest('sendOTP', { email }); 
+
+                if (result && result.success) { 
+                    registrationData = { name, email, password, citizenshipNo }; 
+                    document.getElementById('registerStep1').style.display = 'none'; 
+                    document.getElementById('registerStep2').style.display = 'block'; 
+                    document.getElementById('verifiedEmail').value = email; 
+                    startOtpTimer(result.expiresIn || 600); 
+                    playSuccess(); 
+                    showToast('OTP sent to your email', 'success'); 
+                } else { 
+                    playFailure(); 
+                    showToast(result?.message || 'Failed to send OTP', 'error'); 
+                } 
+            } catch (error) { 
+                playFailure(); 
+                showToast('Error: ' + error.message, 'error'); 
+            } finally { 
+                btn.disabled = false; 
+                btn.textContent = original; 
+            } 
+        }
+        async function verifyOTP() { const otp = document.getElementById('otpInput').value.trim(); if (!otp || otp.length !== 6 || !/^\d+$/.test(otp)) { playFailure(); showToast('Please enter a valid 6-digit OTP', 'error'); return; } const btn = document.getElementById('verifyOtpBtn'); const original = btn.textContent; btn.disabled = true; btn.textContent = 'Verifying...'; try { const verifyResult = await apiRequest('verifyOTP', { email: registrationData.email, otp }); if (verifyResult && verifyResult.success) { const registerResult = await apiRequest('register', { name: registrationData.name, email: registrationData.email, password: registrationData.password, citizenshipNo: registrationData.citizenshipNo }); if (registerResult && registerResult.success) { currentUser = registerResult.user; sessionToken = 'session_' + Date.now(); localStorage.setItem('currentUser', JSON.stringify(currentUser)); localStorage.setItem('sessionToken', sessionToken); updateUserUI(); closeRegisterModal(); playSuccess(); showToast('Registration successful!', 'success'); await loadAllData(); loadFeed(); } else { playFailure(); showToast(registerResult?.message || 'Registration failed', 'error'); } } else { playFailure(); showToast(verifyResult?.message || 'Invalid OTP', 'error'); } } catch (error) { playFailure(); showToast('Error: ' + error.message, 'error'); } finally { btn.disabled = false; btn.textContent = original; } }
+
+        async function resendOTP() { const btn = document.getElementById('resendOtp'); if (btn.classList.contains('disabled')) return; btn.classList.add('disabled'); btn.style.opacity = '0.5'; try { const result = await apiRequest('sendOTP', { email: registrationData.email }); if (result && result.success) { if (otpTimer) clearInterval(otpTimer); startOtpTimer(result.expiresIn || 600); playSuccess(); showToast('OTP resent successfully', 'success'); } else { playFailure(); showToast(result?.message || 'Failed to resend OTP', 'error'); } } catch (error) { playFailure(); showToast('Error: ' + error.message, 'error'); } finally { setTimeout(() => { btn.classList.remove('disabled'); btn.style.opacity = '1'; }, 30000); } }
+
+        function startOtpTimer(seconds) { let timeLeft = seconds; const timer = document.getElementById('otpTimer'); const resend = document.getElementById('resendOtp'); resend.classList.add('disabled'); resend.style.opacity = '0.5'; function update() { const mins = Math.floor(timeLeft / 60); const secs = timeLeft % 60; timer.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} remaining`; if (timeLeft <= 0) { clearInterval(otpTimer); timer.textContent = 'OTP expired'; resend.classList.remove('disabled'); resend.style.opacity = '1'; } timeLeft--; } update(); otpTimer = setInterval(update, 1000); }
+
+        function getCategoryName(categoryId) { if (!categoryId) return 'Uncategorized'; const cat = cachedData.categories.find(c => c.category_id && c.category_id.toString() === categoryId.toString()); return cat ? cat.display_name : 'Uncategorized'; }
+        
+      function loadStories() { const container = document.getElementById('storiesContainer'); if (!cachedData.categories || cachedData.categories.length === 0) { container.innerHTML = ''; return; } let html = ''; cachedData.categories.forEach(s => { html += `<div class="story" onclick="showStory('${s.category_id}')"><div class="story-avatar"><div class="story-avatar-inner" style="background:${s.color || '#667eea'}; color: white;"><i class="${s.icon || 'bx bx-category'}"></i></div></div><div class="story-username">${escapeHtml(s.display_name || 'Category')}</div></div>`; }); container.innerHTML = html; }
+        
+      function showStory(categoryId) { const notices = cachedData.notices.filter(n => n.category_id && n.category_id.toString() === categoryId.toString()); if (notices.length === 0) { showToast('No notices in this category', 'info'); return; } displayFeed(notices); }
+      
+              // Feed
+        function loadFeed() {
+            const container = document.getElementById('feedContainer');
+            container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
+                if (!cachedData.notices || cachedData.notices.length === 0) {
+                    container.innerHTML = '<div class="empty-state">No notices available</div>';
+                    return;
+                }
+                displayFeed(cachedData.notices.slice(0, 100));
+        }
+      
+        function toggleCommentSection(noticeId, event) { event.stopPropagation(); if (activeCommentId && activeCommentId !== noticeId) { const prev = document.getElementById(`comment-section-${activeCommentId}`); if (prev) prev.style.display = 'none'; } const section = document.getElementById(`comment-section-${noticeId}`); if (section) { if (section.style.display === 'none' || activeCommentId !== noticeId) { section.style.display = 'block'; activeCommentId = noticeId; const cb = document.getElementById(`comments-btn-${noticeId}`); const lb = document.getElementById(`likes-btn-${noticeId}`); const cs = document.getElementById(`comments-section-${noticeId}`); const ls = document.getElementById(`likes-section-${noticeId}`); if (cb && lb && cs && ls) { cb.classList.add('active'); lb.classList.remove('active'); cs.style.display = 'block'; ls.style.display = 'none'; } } else { section.style.display = 'none'; activeCommentId = null; } } }
+        
+      function closeCommentSection(noticeId) {
+        const section = document.getElementById(`comment-section-${noticeId}`);
+        if (section) section.style.display = 'none';
+        if (activeCommentId === noticeId) activeCommentId = null;
+      }
+      function toggleCommentsLikes(noticeId, type, event) { event.stopPropagation(); const cb = document.getElementById(`comments-btn-${noticeId}`); const lb = document.getElementById(`likes-btn-${noticeId}`); const cs = document.getElementById(`comments-section-${noticeId}`); const ls = document.getElementById(`likes-section-${noticeId}`); if (type === 'comments') { cb.classList.add('active'); lb.classList.remove('active'); cs.style.display = 'block'; ls.style.display = 'none'; } else { cb.classList.remove('active'); lb.classList.add('active'); cs.style.display = 'none'; ls.style.display = 'block'; } }
+
+        function generateNoticeHTML(notice) { if (!notice) return ''; const comments = cachedData.comments.filter(c => c.notice_id && c.notice_id.toString() === notice.notice_id.toString() && c.status === 'active'); const isLiked = currentUser ? cachedData.likes.some(l => l.user_id === currentUser.id && l.notice_id.toString() === notice.notice_id.toString() && l.status === 'active') : false; return `<div class="notice-card" data-notice-id="${notice.notice_id}"><div class="notice-header" onclick="showNoticeDetail('${notice.notice_id}')"><div class="notice-avatar">${notice.author ? notice.author.charAt(0).toUpperCase() : 'U'}</div><div class="notice-user"><div class="notice-author">${escapeHtml(notice.author || 'Unknown')}</div><div><span class="notice-category">${escapeHtml(getCategoryName(notice.category_id))}</span>•<span class="notice-date">${notice.formatted_date || ''}</span></div></div></div><div class="notice-content" onclick="showNoticeDetail('${notice.notice_id}')"><div class="notice-title">${escapeHtml(notice.display_title || 'Untitled')}</div><div class="notice-text">${escapeHtml((notice.display_content || '').substring(0, 150))}${(notice.display_content || '').length > 150 ? '...' : ''}</div></div><div class="notice-actions"><button class="action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${notice.notice_id}', this, event)"><i class="bx ${isLiked ? 'bxs-heart' : 'bx-heart'}"></i><span class="action-count">${notice.likes || 0}</span></button><button class="action-btn" onclick="toggleCommentSection('${notice.notice_id}', event)"><i class="bx bx-message-rounded"></i><span class="action-count">${comments.length}</span></button><button class="action-btn" onclick="showNoticeDetail('${notice.notice_id}')"><i class="bx bx-show"></i><span class="action-count">${notice.views || 0}</span></button><button class="action-btn" onclick="shareNotice('${notice.notice_id}', event)"><i class="bx bx-share-alt"></i><span class="action-count">${notice.shares || 0}</span></button></div><div class="comment-container" id="comment-section-${notice.notice_id}" style="display: none;">${currentUser ? `<div class="add-comment"><textarea class="comment-input" id="comment-${notice.notice_id}" placeholder="Add a comment..." rows="1"></textarea><button class="post-comment-btn" onclick="postComment('${notice.notice_id}', event)"><i class="bx bx-send"></i></button></div>` : ''}<div class="toggle-buttons"><button class="toggle-btn active" id="comments-btn-${notice.notice_id}" onclick="toggleCommentsLikes('${notice.notice_id}', 'comments', event)"><i class="bx bx-message-rounded"></i> Comments (${comments.length})</button><button class="toggle-btn" id="likes-btn-${notice.notice_id}" onclick="toggleCommentsLikes('${notice.notice_id}', 'likes', event)"><i class="bx bx-heart"></i> Likes (${notice.likes || 0})</button></div><div class="comments-section" id="comments-section-${notice.notice_id}">${generateCommentsHTML(notice.notice_id)}</div><div class="likes-section" id="likes-section-${notice.notice_id}" style="display: none;">${generateLikesHTML(notice.notice_id)}</div></div></div>`; }
+        
+      function generateCommentsHTML(noticeId) { const comments = cachedData.comments.filter(c => c.notice_id && c.notice_id.toString() === noticeId.toString() && c.status === 'active').sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); if (comments.length === 0) return '<div class="empty-state" style="padding: 20px;">No comments yet</div>'; let html = ''; comments.forEach(c => { const isOwner = currentUser && c.user_id === currentUser.id; html += `<div class="comment-item"><div class="comment-header"><div class="comment-author">${escapeHtml(c.user_name || 'Unknown')}</div><div class="comment-time">${formatTimeAgo(c.timestamp)}</div></div><div class="comment-text">${escapeHtml(c.comment || '')}</div>${isOwner ? `<div class="comment-actions"><button class="comment-action-btn" onclick="showEditComment('${c.comment_id}', '${noticeId}', '${(c.comment || '').replace(/'/g, "\\'")}')"><i class="bx bx-edit"></i> Edit</button><button class="comment-action-btn" onclick="deleteComment('${c.comment_id}', '${noticeId}')"><i class="bx bx-trash"></i> Delete</button></div>` : ''}</div>`; }); return html; }
+        
+      function generateLikesHTML(noticeId) { const likes = cachedData.likes.filter(l => l.notice_id && l.notice_id.toString() === noticeId.toString() && l.status === 'active').map(l => { const u = cachedData.users.find(u => u.user_id === l.user_id); return { ...l, user_name: u ? u.name : 'Unknown User' }; }); if (likes.length === 0) return '<div class="empty-state" style="padding: 20px;">No likes yet</div>'; let html = ''; likes.forEach(l => { html += `<div class="like-user-item"><div class="like-user-avatar">${l.user_name ? l.user_name.charAt(0).toUpperCase() : 'U'}</div><div class="like-user-info"><div class="like-user-name">${escapeHtml(l.user_name)}</div><div class="like-user-time">${formatTimeAgo(l.timestamp)}</div></div></div>`; }); return html; }
+        
+      function displayFeed(notices) { const container = document.getElementById('feedContainer'); if (notices.length === 0) { container.innerHTML = '<div class="empty-state">No notices available</div>'; return; } let html = ''; notices.forEach(n => { html += generateNoticeHTML(n); }); container.innerHTML = html; updateLanguage(); }
+       async function postComment(noticeId, event) {
+            event.stopPropagation();
+            if (!currentUser) { 
+                showLoginForm(); 
+                return; 
+            }
+            const input = document.getElementById(`comment-${noticeId}`);
+            const comment = input.value.trim();
+            if (!comment) { 
+                playFailure(); 
+                showToast('Please write a comment', 'error'); 
+                return; 
+            }
+            const btn = event.currentTarget;
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Posting...';
+            try {
+                const result = await apiRequest('addComment', { 
+                    noticeId, 
+                    userId: currentUser.id, 
+                    comment 
+                });
+
+                if (result && result.success) {
+                    input.value = '';
+                    input.style.height = 'auto';
+                    playSuccess(); 
+                    showToast('Comment added', 'success');
+
+                    // Reload data and update UI
+                    await loadAllData();
+
+                    // Update comments section in feed
+                    const cs = document.getElementById(`comments-section-${noticeId}`);
+                    if (cs) cs.innerHTML = generateCommentsHTML(noticeId);
+
+                    // Update comments section in detail modal if open
+                    const detailCs = document.getElementById(`detail-comments-section-${noticeId}`);
+                    if (detailCs) detailCs.innerHTML = generateCommentsHTML(noticeId);
+
+                    // Update comment count button in feed
+                    const cb = document.getElementById(`comments-btn-${noticeId}`);
+                    if (cb) {
+                        const newCount = cachedData.comments.filter(c => c.notice_id.toString() === noticeId.toString() && c.status === 'active').length;
+                        cb.innerHTML = `<i class="bx bx-message-rounded"></i> Comments (${newCount})`;
+                    }
+
+                    // Update comment count button in detail modal
+                    const detailCb = document.getElementById(`detail-comments-btn-${noticeId}`);
+                    if (detailCb) {
+                        const newCount = cachedData.comments.filter(c => c.notice_id.toString() === noticeId.toString() && c.status === 'active').length;
+                        detailCb.innerHTML = `<i class="bx bx-message-rounded"></i> Comments (${newCount})`;
+                    }
+                } else {
+                    playFailure(); 
+                    showToast(result?.message || 'Failed to add comment', 'error');
+                }
+            } catch (error) {
+                playFailure(); 
+                showToast('Error: ' + error.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+		async function deleteComment(commentId, noticeId) { const result = await Swal.fire({ title: 'Delete Comment?', text: "You won't be able to revert this!", icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, delete it!' }); if (result.isConfirmed) { try { const r = await apiRequest('deleteComment', { commentId, userId: currentUser.id }); if (r && r.success) { playSuccess(); showToast('Comment deleted', 'success'); await loadAllData(); const cs = document.getElementById(`comments-section-${noticeId}`); if (cs) cs.innerHTML = generateCommentsHTML(noticeId); const cb = document.getElementById(`comments-btn-${noticeId}`); if (cb) { const newCount = cachedData.comments.filter(c => c.notice_id.toString() === noticeId.toString() && c.status === 'active').length; cb.innerHTML = `<i class="bx bx-message-rounded"></i> Comments (${newCount})`; } } else { playFailure(); showToast(r?.message || 'Delete failed', 'error'); } } catch (error) { playFailure(); showToast('Error: ' + error.message, 'error'); } } }
+        
+      function showEditComment(commentId, noticeId, currentText) { document.getElementById('editCommentId').value = commentId; document.getElementById('editCommentNoticeId').value = noticeId; document.getElementById('editCommentText').value = currentText; document.getElementById('editCommentModal').classList.add('active'); }
+        
+      async function handleEditComment(e) { e.preventDefault(); const commentId = document.getElementById('editCommentId').value; const noticeId = document.getElementById('editCommentNoticeId').value; const newComment = document.getElementById('editCommentText').value; if (!newComment) { playFailure(); showToast('Please write a comment', 'error'); return; } closeEditCommentModal(); const result = await Swal.fire({ title: 'Update Comment?', text: 'Are you sure?', icon: 'question', showCancelButton: true, confirmButtonText: 'Yes, update it!' }); if (result.isConfirmed) { try { const r = await apiRequest('editComment', { commentId, newComment, userId: currentUser.id }); if (r && r.success) { playSuccess(); showToast('Comment updated', 'success'); await loadAllData(); const cs = document.getElementById(`comments-section-${noticeId}`); if (cs) cs.innerHTML = generateCommentsHTML(noticeId); } else { playFailure(); showToast(r?.message || 'Update failed', 'error'); } } catch (error) { playFailure(); showToast('Error: ' + error.message, 'error'); } } }
+
+        async function toggleLike(noticeId, button, event) {
+            event.stopPropagation();
+            if (!currentUser) {
+                showLoginForm();
+                return;
+            }
+            const icon = button.querySelector('i');
+            const span = button.querySelector('.action-count');
+            const wasLiked = button.classList.contains('liked');
+            const current = parseInt(span.textContent) || 0;
+
+            // Optimistic UI update
+            button.classList.toggle('liked');
+            icon.className = button.classList.contains('liked') ? 'bx bxs-heart' : 'bx bx-heart';
+            span.textContent = wasLiked ? current - 1 : current + 1;
+
+            try {
+                const result = await apiRequest('toggleLike', { noticeId, userId: currentUser.id });
+
+                if (result && result.success) {
+                    const newCount = result.likeCount || 0;
+                    span.textContent = newCount;
+
+                    // Real-time update likes section (same as comments)
+                    const ls = document.getElementById(`likes-section-${noticeId}`);
+                    if (ls) ls.innerHTML = generateLikesHTML(noticeId);
+
+                    // Update likes button
+                    const lb = document.getElementById(`likes-btn-${noticeId}`);
+                    if (lb) lb.innerHTML = `<i class="bx bx-heart"></i> Likes (${newCount})`;
+
+                    // Optional: Update detail modal if open
+                    const detailLs = document.getElementById(`detail-likes-section-${noticeId}`);
+                    if (detailLs) detailLs.innerHTML = generateLikesHTML(noticeId);
+
+                    const detailLb = document.getElementById(`detail-likes-btn-${noticeId}`);
+                    if (detailLb) detailLb.innerHTML = `<i class="bx bx-heart"></i> Likes (${newCount})`;
+
+                    // Update cached data
+                    const notice = cachedData.notices.find(n => n.notice_id.toString() === noticeId.toString());
+                    if (notice) notice.likes = newCount;
+                } else {
+                    // Revert optimistic update
+                    button.classList.toggle('liked');
+                    icon.className = button.classList.contains('liked') ? 'bx bxs-heart' : 'bx bx-heart';
+                    span.textContent = current;
+                    showToast(result?.message || 'Failed to toggle like', 'error');
+                }
+            } catch (error) {
+                // Revert optimistic update
+                button.classList.toggle('liked');
+                icon.className = button.classList.contains('liked') ? 'bx bxs-heart' : 'bx bx-heart';
+                span.textContent = current;
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+        
+      async function shareNotice(noticeId, event) { event.stopPropagation(); const notice = cachedData.notices.find(n => n.notice_id.toString() === noticeId.toString()); if (!notice) return; const url = `${window.location.origin}${window.location.pathname}#notice-${noticeId}`; const text = `${notice.display_title}\n\n${(notice.display_content || '').substring(0, 200)}\n\nShared from Notice Board`; const btn = event.currentTarget; const span = btn.querySelector('.action-count'); const current = parseInt(span.textContent) || 0; span.textContent = current + 1; try { if (navigator.share) await navigator.share({ title: notice.display_title, text: text, url: url }); else await navigator.clipboard.writeText(`${text}\n\n${url}`); const result = await apiRequest('incrementShare', { noticeId }); if (result && result.success) notice.shares = (notice.shares || 0) + 1; else { span.textContent = current; showToast('Failed to track share', 'error'); } } catch (error) { span.textContent = current; if (error.name !== 'AbortError') showToast('Error: ' + error.message, 'error'); } }
+        
+      function loadLikedNotices() { const container = document.getElementById('likedContainer'); if (!currentUser) { container.innerHTML = '<div class="empty-state">Please login to view liked notices</div>'; return; } container.innerHTML = '<div class="loading"> <img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>'; setTimeout(() => { const likedIds = new Set(); cachedData.likes.forEach(l => { if (l.user_id === currentUser.id && l.status === 'active') likedIds.add(l.notice_id.toString()); }); const liked = cachedData.notices.filter(n => likedIds.has(n.notice_id.toString())); if (liked.length === 0) { container.innerHTML = '<div class="empty-state">No liked notices yet</div>'; return; } let html = ''; liked.forEach(n => { html += generateNoticeHTML(n); }); container.innerHTML = html; }, 50); updateLanguage();}
+
+      
+      // Replace the showBillData function in the HTML with this updated version
+async function showBillData() {
+    const contentDiv = document.getElementById('billdataContainer');
+    if (!currentUser) { 
+        contentDiv.innerHTML = '<div class="empty-state">Please login to view Own Bill</div>'; 
+        return; 
+    }
+    contentDiv.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';    
+    
+    try {
+        const result = await apiRequest('getUserAdditionalData', { userId: currentUser.id });        
+        
+        if (result && result.success) {
+            const data = result.additionalData;            
+            // Get current date          
+            const date = new Date();          
+            const currentDate = formatDateTime(date);
+
+            // Create unique ID for this bill instance
+            const billId = 'bill_' + Date.now();
+
+            // Create printable bill HTML
+            const billHTML = `
+                <div class="printable-bill-wrapper">
+                    <div class="bill-actions">
+                        <button class="print-bill-btn" onclick="printBill('${billId}')">
+                            <i class="print-icon">🖨️</i> Print Bill
+                        </button>
+                        <button class="download-bill-btn" onclick="downloadBillAsPDF('${billId}')">
+                            <i class="download-icon">📄</i> Download as PDF
+                        </button>
+                    </div>
+
+                    <div id="${billId}" class="printable-bill">
+                        <div class="bill-container">
+                            <div class="bill-metas">
+                                <div class="bill-number">PAN No: 303334693</div>
+                                <div class="bill-date">Reg. No: 386/2063/064</div>
+                            </div>
+                            <!-- Header with logo and company info -->
+                            <div class="bill-header">
+                                <div class="logo-section">
+                                    <div class="company-logo-placeholder">
+                                        <img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="60" height="60">
+                                    </div>
+                                    <div class="company-name"><span>JIBAN JYOTI GRAMIN BIDHYUT S. S. LTD.</span> <br> <span> janaki-2,kaireni kailali</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Bill Title and Date -->
+                            <div class="bill-title-section">                                
+                                <div class="bill-meta">
+                                    <div class="bill-number">Bill No: ${escapeHtml(data.field_2 || '...')}</div>
+                                    <div class="bill-date">Date: ${escapeHtml(currentDate)}</div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Details -->
+                            <div class="customer-section">
+                                <div class="customer-card">
+                                    <h2>INVOICE</h2>
+                                    <div class="customer-info">
+                                        <p><strong>Customer ID:</strong> ${escapeHtml(data.citizenship_no || 'N/A')}</p>
+                                        <p><strong>Customer Name:</strong> ${escapeHtml(data.field_1 || 'N/A')}</p>
+                                        <p><strong>Due Months:</strong> ${escapeHtml(data.field_3 || 'Null')}</p>
+                                        <p><strong>Payment Date:</strong> ${escapeHtml(data.field_12 || 'Not Paid Yet')}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bill Table -->
+                            <div class="bill-table-container">
+                                <table class="bill-table">
+                                    <thead>
+                                        <tr>
+                                            <th>RN</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${data.field_4 ? `<tr><td>1</td><td>Consumption Unit Fee</td><td class="amount">${escapeHtml(formatCurrency(data.field_4))}</td></tr>` : ''}
+                                        ${data.field_5 ? `<tr><td>2</td><td>Demand Fee</td><td class="amount">${escapeHtml(formatCurrency(data.field_5))}</td></tr>` : ''}
+                                        ${data.field_6 ? `<tr><td>3</td><td>Activity Fee</td><td class="amount">${escapeHtml(formatCurrency(data.field_6))}</td></tr>` : ''}
+                                        ${data.field_7 ? `<tr><td>4</td><td>Card Fee</td><td class="amount">${escapeHtml(formatCurrency(data.field_7))}</td></tr>` : ''}
+                                        ${data.field_8 ? `<tr><td>5</td><td>Other Fee</td><td class="amount">${escapeHtml(formatCurrency(data.field_8))}</td></tr>` : ''}
+                                        <tr class="subtotal-row">
+                                            <td colspan="2"><strong>Gross Total</strong></td>
+                                            <td class="amount"><strong>${escapeHtml(formatCurrency(data.field_9))}</strong></td>
+                                        </tr>
+                                        ${data.field_10 ? `<tr><td colspan="2">Late Fine</td><td class="amount">${escapeHtml(formatCurrency(data.field_10))}</td></tr>` : ''}
+                                        <tr class="total-row">
+                                            <td colspan="2"><strong>Net Total</strong></td>
+                                            <td class="amount"><strong>${escapeHtml(formatCurrency(data.field_11))}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Payment Details -->
+                            <div class="payment-section">
+                                <div class="payment-card">
+                                    <div class="payment-grid">
+                                        <div class="payment-item">
+                                            <span class="payment-label">Payment Amount:</span>
+                                            <span class="payment-value">${escapeHtml(formatCurrency(data.field_13))}</span>
+                                        </div>
+                                        <div class="payment-item">
+                                            <span class="payment-label">Balance Amount:</span>
+                                            <span class="payment-value ${getBalanceClass(data.field_14)}">${escapeHtml(formatCurrency(data.field_14))}</span>
+                                        </div>
+                                        <div class="payment-item">
+                                            <span class="payment-label">Method:</span>
+                                            <span class="payment-value">${escapeHtml(data.field_16 || '...')}</span>
+                                        </div>
+                                        <div class="payment-item">
+                                            <span class="payment-label">Status:</span>
+                                            <span class="status-badge ${getStatusClass(data.field_15)}">${escapeHtml(data.field_15 || 'Pending')}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="bill-footer">
+                                <div class="terms-section">
+                                    <p><strong>Terms & Conditions:</strong></p>
+                                    <ul>
+                                        <li>Please pay within 30 days of meter reading date</li>
+                                        <li>Late payment will incur additional charges</li>
+                                        <li>This is a computer generated invoice</li>
+                                    </ul>
+                                </div>
+                                <div class="signature-section">
+                                    <div class="signature-line"></div>
+                                    <p>Authorized Signature</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            contentDiv.innerHTML = billHTML;
+
+        } else { 
+            contentDiv.innerHTML = '<div class="empty-state">Failed to load additional data</div>'; 
+        }
+    } catch (error) { 
+        contentDiv.innerHTML = '<div class="empty-state">Error loading data</div>'; 
+    }
+}
+    // Print function
+    function printBill(billId) {
+        const billElement = document.getElementById(billId);
+        if (!billElement) return;
+
+        // Get the HTML content
+        const printContent = billElement.cloneNode(true);
+
+        // Create print window
+        const printWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
+
+        // Add print styles
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Utility Bill - Print</title>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                    }
+
+                    body {
+                        font-family: 'Arial', 'Helvetica', sans-serif;
+                        background: white;
+                        padding: 20px;
+                    }
+
+                    .printable-bill {
+                        max-width: 800px;
+                        margin: 0 auto;
+                        background: white;
+                    }
+
+                    .bill-container {
+                        background: white;
+                    }
+
+                    /* Bill Header */
+                    .bill-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 20px 0;
+                        border-bottom: 2px solid #333;
+                        margin-bottom: 20px;
+                    }
+
+                    .logo-section {
+                        display: flex;
+                        align-items: center;
+                        gap: 15px;
+                    }
+
+                    .company-logo-placeholder svg {
+                        width: 60px;
+                        height: 60px;
+                    }
+
+                    .company-name {
+                        font-size: 20px;
+                        font-weight: bold;
+                        color: #333;
+                    }
+
+                    .company-details {
+                        text-align: right;
+                        font-size: 11px;
+                        color: #666;
+                        line-height: 1.4;
+                    }
+
+                    /* Bill Title */
+                    .bill-title-section {
+                        text-align: center;
+                        margin-bottom: 25px;
+                    }
+
+                  .customer-card h2 {
+                      font-size: 24px;
+                      color: #333;
+                      margin-bottom: 10px;
+                      margin-left: 33.33%;
+                      text-decoration: underline;
+                      }
+
+                    .bill-meta , .bill-metas {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 12px;
+                        color: #666;
+                    }
+                    /* Customer Section */
+                    .customer-section {
+                        margin-bottom: 20px;
+                    }
+
+                    .customer-card {
+                        background: #f9f9f9;
+                        padding: 15px;
+                        border-radius: 5px;
+                    }
+
+                    .customer-card h3 {
+                        margin-bottom: 10px;
+                        font-size: 16px;
+                    }
+                    .customer-info {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr); /* 2 per row */
+                        gap: 7px;
+                    }
+                    .customer-info p {
+                        margin: 5px 0;
+                        font-size: 14px;
+                    }
+
+                    /* Bill Table */
+                    .bill-table-container {
+                        margin: 20px 0;
+                        overflow-x: auto;
+                    }
+
+                    .bill-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 14px;
+                    }
+
+                    .bill-table th,
+                    .bill-table td {
+                        border: 1px solid #ddd;
+                        padding: 10px;
+                        text-align: center;
+                    }
+
+                    .bill-table th {
+                        background-color: #f4f4f4;
+                        font-weight: bold;
+                    }
+
+                    .subtotal-row td,
+                    .total-row td {
+                        background-color: #f9f9f9;
+                    }
+
+                    .total-row {
+                        font-size: 16px;
+                    }
+
+                    /* Payment Section */
+                    .payment-section {
+                        margin: 20px 0;
+                    }
+
+                    .payment-card {
+                        background: #f9f9f9;
+                        padding: 15px;
+                        border-radius: 5px;
+                    }
+
+                    .payment-card h3 {
+                        margin-bottom: 10px;
+                        font-size: 16px;
+                    }
+
+                    .payment-grid {
+                         display: flex;
+                        justify-content: space-between;
+                        padding: 5px 0;
+                    }
+
+                    .payment-label {
+                        font-weight: bold;
+                    }
+
+                    .status-badge {
+                        padding: 2px 8px;
+                        border-radius: 3px;
+                        font-size: 12px;
+                        font-weight: bold;
+                    }
+
+                    .status-paid { background: #d4edda; color: #155724; }
+                    .status-pending { background: #fff3cd; color: #856404; }
+                    .status-overdue { background: #f8d7da; color: #721c24; }
+
+                    .balance-positive { color: #28a745; font-weight: bold; }
+                    .balance-negative { color: #dc3545; font-weight: bold; }
+
+                    /* Footer */
+                    .bill-footer {
+                        margin-top: 30px;
+                        padding-top: 20px;
+                        border-top: 1px solid #ddd;
+                        display: flex;
+                        justify-content: space-between;
+                    }
+
+                    .terms-section {
+                        font-size: 11px;
+                        color: #666;
+                        flex: 1;
+                    }
+
+                    .terms-section ul {
+                        margin-left: 20px;
+                        margin-top: 5px;
+                    }
+
+                    .signature-section {
+                        text-align: center;
+                        width: 200px;
+                    }
+
+                    .signature-line {
+                        border-top: 1px solid #333;
+                        width: 150px;
+                        margin: 20px auto 5px;
+                    }
+
+                    .signature-section p {
+                        font-size: 11px;
+                        color: #666;
+                    }
+
+                    @media print {
+                        body {
+                            padding: 0;
+                        }
+
+                        .printable-bill {
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        .status-badge {
+                            border: 1px solid #ddd;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                ${printContent.outerHTML}
+                <br>
+                 ${printContent.outerHTML}
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        window.onafterprint = function() {
+                            window.close();
+                        };
+                    };
+                <\/script>
+            </body>
+            </html>
+        `);
+
+        printWindow.document.close();
+    }      
+        
+      async function generateNoticeDetailHTML(notice) { if (!notice) return ''; const comments = cachedData.comments.filter(c => c.notice_id && c.notice_id.toString() === notice.notice_id.toString() && c.status === 'active'); const isLiked = currentUser ? cachedData.likes.some(l => l.user_id === currentUser.id && l.notice_id.toString() === notice.notice_id.toString() && l.status === 'active') : false; return `<div class="notice-card"><div class="notice-header"><div class="notice-avatar">${notice.author ? notice.author.charAt(0).toUpperCase() : 'U'}</div><div class="notice-user"><div class="notice-author">${escapeHtml(notice.author || 'Unknown')}</div><div><span class="notice-category">${escapeHtml(getCategoryName(notice.category_id))}</span>•<span class="notice-date">${notice.formatted_date || ''}</span></div></div></div><div class="notice-content"><div class="notice-title">${escapeHtml(notice.display_title || 'Untitled')}</div><div class="notice-text">${escapeHtml(notice.display_content || '')}</div></div><div class="notice-actions"><button class="action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${notice.notice_id}', this, event)"><i class="bx ${isLiked ? 'bxs-heart' : 'bx-heart'}"></i><span class="action-count">${notice.likes || 0}</span></button><button class="action-btn" onclick="toggleDetailCommentSection('${notice.notice_id}', event)"><i class="bx bx-message-rounded"></i><span class="action-count">${comments.length}</span></button><button class="action-btn"><i class="bx bx-show"></i><span class="action-count">${notice.views || 0}</span></button><button class="action-btn" onclick="shareNotice('${notice.notice_id}', event)"><i class="bx bx-share-alt"></i><span class="action-count">${notice.shares || 0}</span></button></div></div>`; }
+     
+        function showSection(sectionId) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.getElementById(sectionId).classList.add('active'); activeCommentId = null; if (sectionId === 'liked') loadLikedNotices(); else if (sectionId === 'home') loadAllData(); loadFeed(); if (sectionId !== 'home') window.location.hash = ''; }
+      
+        function showBill() { showSection('billdata'); document.getElementById('userDropdown').classList.remove('show'); if (currentUser) { showBillData(); } }
+      
+      function showSettings() { showSection('settings'); document.getElementById('userDropdown').classList.remove('show'); if (currentUser) { document.getElementById('editProfileName').value = decodeText(currentUser.name) || ''; document.getElementById('editProfileEmail').value = currentUser.email || ''; document.getElementById('editProfileCitizenship').value = currentUser.citizenship_no || ''; } }
+        function changeSettingsTab(tabId) { document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active')); document.querySelector(`[data-tab="${tabId}"]`).classList.add('active'); document.querySelectorAll('.settings-content').forEach(c => c.classList.remove('active')); document.getElementById(`${tabId}Settings`).classList.add('active'); }
+        
+      async function handleEditProfile(e) { e.preventDefault(); if (!currentUser) return; const name = document.getElementById('editProfileName').value; const email = document.getElementById('editProfileEmail').value; const citizenship = document.getElementById('editProfileCitizenship').value; if (!name || !email) { playFailure(); showToast('Please fill all required fields', 'error'); return; } const result = await Swal.fire({ title: 'Update Profile?', text: 'Are you sure?', icon: 'question', showCancelButton: true, confirmButtonText: 'Yes, update it!' }); if (result.isConfirmed) { const btn = e.target.querySelector('button'); const original = btn.textContent; btn.disabled = true; btn.textContent = 'Updating...'; try { const r = await apiRequest('updateProfile', { userId: currentUser.id, name, email, citizenshipNo: citizenship }); if (r && r.success) { currentUser = r.user; currentUser.citizenship_no = citizenship; localStorage.setItem('currentUser', JSON.stringify(currentUser)); updateUserUI(); playSuccess(); showToast('Profile updated', 'success'); } else { playFailure(); showToast(r?.message || 'Update failed', 'error'); } } catch (error) { playFailure(); showToast('Error: ' + error.message, 'error'); } finally { btn.disabled = false; btn.textContent = original; } } }
+        
+      async function handleChangePassword(e) { e.preventDefault(); if (!currentUser) return; const current = document.getElementById('currentPassword').value; const newPwd = document.getElementById('newPassword').value; const confirm = document.getElementById('confirmPassword').value; if (!current || !newPwd || !confirm) { playFailure(); showToast('Please fill all fields', 'error'); return; } if (newPwd !== confirm) { playFailure(); showToast('New passwords do not match', 'error'); return; } const result = await Swal.fire({ title: 'Change Password?', text: 'Are you sure?', icon: 'question', showCancelButton: true, confirmButtonText: 'Yes, change it!' }); if (result.isConfirmed) { const btn = e.target.querySelector('button'); const original = btn.textContent; btn.disabled = true; btn.textContent = 'Updating...'; try { const r = await apiRequest('changePassword', { currentPassword: current, newPassword: newPwd, userId: currentUser.id }); if (r && r.success) { e.target.reset(); playSuccess(); showToast('Password changed', 'success'); } else { playFailure(); showToast(r?.message || 'Password change failed', 'error'); } } catch (error) { playFailure(); showToast('Error: ' + error.message, 'error'); } finally { btn.disabled = false; btn.textContent = original; } } }
+
+// Show Admin Panel (called from dropdown)
+function showAdminPanel() {
+    if (currentUser && currentUser.role === 'admin') {
+        showSection('adminPanel');
+        loadAdminNotices();
+        loadAdminCategories();
+        // Close dropdown
+        document.getElementById('userDropdown').classList.remove('show');
+    } else {
+        showToast('Admin access required. Please contact administrator.', 'error');
+    }
+}
+
+// Switch between notices and categories tabs
+function switchAdminTab(tab) {
+    const noticesPanel = document.getElementById('adminNoticesPanel');
+    const categoriesPanel = document.getElementById('adminCategoriesPanel');
+    const tabs = document.querySelectorAll('.admin-tab');
+    
+    tabs.forEach(t => t.classList.remove('active'));
+    if (tab === 'notices') {
+        noticesPanel.style.display = 'block';
+        categoriesPanel.style.display = 'none';
+        document.querySelector('.admin-tab[data-tab="notices"]').classList.add('active');
+        loadAdminNotices();
+    } else {
+        noticesPanel.style.display = 'none';
+        categoriesPanel.style.display = 'block';
+        document.querySelector('.admin-tab[data-tab="categories"]').classList.add('active');
+        loadAdminCategories();
+    }
+}
+
+async function loadAdminNotices() {
+    const tbody = document.getElementById('noticesTableBody');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;"><div class="spinner"></div> Loading notices...</td></tr>';
+    
+    try {
+        const result = await apiRequest('getAllData');
+        if (result && result.success) {
+            const notices = result.notices || [];
+            if (notices.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No notices found. Create your first notice!</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            notices.forEach(notice => {
+                const categoryName = getCategoryName(notice.category_id);
+                const statusBadge = notice.status === 'active' 
+                    ? '<span style="color: #27ae60;">✅ Active</span>' 
+                    : '<span style="color: #e74c3c;">⭕ Inactive</span>';
+                
+                // Apply decodeText to remove + signs when displaying in table
+                const decodedTitleNp = decodeText(notice.title_np || '');
+                const decodedTitleEn = decodeText(notice.title_en || '');
+                
+                html += `
+                    <tr>
+                        <td><code>${notice.notice_id.substring(0, 8)}...</code></td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(decodedTitleNp)}</td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(decodedTitleEn)}</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="editNotice('${notice.notice_id}')" style="margin-right: 5px;">
+                                <i class="bx bx-edit"></i> Edit
+                            </button>
+                            <button class="btn-sm btn-danger" onclick="deleteNotice('${notice.notice_id}')">
+                                <i class="bx bx-trash"></i> Del
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        } else {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Failed to load notices</td></tr>';
+        }
+    } catch (error) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Error loading notices</td></tr>';
+        console.error(error);
+    }
+}
+async function loadAdminCategories() {
+    const tbody = document.getElementById('categoriesTableBody');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;"><div class="spinner"></div> Loading categories...</td></tr>';
+    
+    try {
+        const result = await apiRequest('getAllData');
+        if (result && result.success) {
+            const categories = result.categories || [];
+            if (categories.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No categories found. Create your first category!</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            categories.forEach(cat => {
+                const statusBadge = cat.status === 'active' 
+                    ? '<span style="color: #27ae60;">✅ Active</span>' 
+                    : '<span style="color: #e74c3c;">⭕ Inactive</span>';
+                
+                // Apply decodeText to remove + signs when displaying in table
+                const decodedNameNp = decodeText(cat.name_np || '');
+                const decodedNameEn = decodeText(cat.name_en || '');
+                
+                html += `
+                    <tr>
+                        <td><code>${cat.category_id.substring(0, 8)}...</code></td>
+                        <td>${escapeHtml(decodedNameNp)}</td>
+                        <td>${escapeHtml(decodedNameEn)}</td>                       
+                        <td>${statusBadge}</td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="editCategory('${cat.category_id}')" style="margin-right: 5px;">
+                                <i class="bx bx-edit"></i> Edit
+                            </button>
+                            <button class="btn-sm btn-danger" onclick="deleteCategory('${cat.category_id}')">
+                                <i class="bx bx-trash"></i> Del
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        } else {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Failed to load categories</td></tr>';
+        }
+    } catch (error) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Error loading categories</td></tr>';
+        console.error(error);
+    }
+}
+
+function openNoticeModal(notice = null) {
+    document.getElementById('noticeForm').reset();
+    document.getElementById('noticeId').value = '';
+    document.getElementById('noticeModalTitle').innerHTML = '<i class="bx bx-plus-circle"></i> Add New Notice';
+    
+    // Load categories into select dropdown
+    loadCategorySelect();
+    
+    if (notice) {
+        document.getElementById('noticeModalTitle').innerHTML = '<i class="bx bx-edit-alt"></i> Edit Notice';
+        document.getElementById('noticeId').value = notice.notice_id;
+        
+        // Apply decodeText to remove + signs
+        document.getElementById('title_np').value = decodeText(notice.title_np || '');
+        document.getElementById('title_en').value = decodeText(notice.title_en || '');
+        document.getElementById('content_np').value = decodeText(notice.content_np || '');
+        document.getElementById('content_en').value = decodeText(notice.content_en || '');
+        document.getElementById('notice_status').value = notice.status || 'active';
+        
+        // Set selected category
+        if (notice.category_id) {
+            setTimeout(() => {
+                const categorySelect = document.getElementById('category_id');
+                if (categorySelect) {
+                    categorySelect.value = notice.category_id;
+                }
+            }, 100);
+        }
+    }
+    
+    document.getElementById('noticeModal').classList.add('active');
+}
+
+async function loadCategorySelect(selectedId = null) {
+    const select = document.getElementById('category_id');
+    select.innerHTML = '<option value="">-- Select Category --</option>';
+    
+    try {
+        const result = await apiRequest('getAllData');
+        if (result && result.success) {
+            const categories = result.categories.filter(c => c.status === 'active');
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.category_id;
+                // Decode both names to remove + signs
+                const decodedNp = decodeText(cat.name_np || '');
+                const decodedEn = decodeText(cat.name_en || '');
+                option.textContent = `${decodedNp} / ${decodedEn}`;
+                if (selectedId && selectedId === cat.category_id) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading categories:', error);
+    }
+}
+      
+function editNotice(noticeId) {
+    const notice = cachedData.notices.find(n => n.notice_id.toString() === noticeId.toString());
+    if (notice) {
+        // Decode all text fields to convert + back to spaces
+        openNoticeModal({
+            ...notice,
+            title_np: decodeText(notice.title_np || ''),
+            title_en: decodeText(notice.title_en || ''),
+            content_np: decodeText(notice.content_np || ''),
+            content_en: decodeText(notice.content_en || '')
+        });
+    } else {
+        showToast('Notice not found', 'error');
+    }
+}
+
+// Save notice (create or update)
+async function saveNotice(event) {
+    event.preventDefault();
+    
+    const noticeId = document.getElementById('noticeId').value;
+    const title_np = document.getElementById('title_np').value.trim();
+    const title_en = document.getElementById('title_en').value.trim();
+    const content_np = document.getElementById('content_np').value.trim();
+    const content_en = document.getElementById('content_en').value.trim();
+    const category_id = document.getElementById('category_id').value;
+    const status = document.getElementById('notice_status').value;
+    
+    if (!title_np || !title_en || !content_np || !content_en) {
+        showToast('Please fill all required fields', 'error');
+        return;
+    }
+    
+    const action = noticeId ? 'updateNotice' : 'createNotice';
+    const payload = {
+        noticeId: decodeText(noticeId),
+        title_np: decodeText(title_np),
+        title_en: decodeText(title_en),
+        content_np: decodeText(content_np),
+        content_en: decodeText(content_en),
+        category_id: decodeText(category_id),
+        status: status,
+        userId: currentUser?.id
+    };
+    
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
+    btn.disabled = true;
+    
+    try {
+        const result = await apiRequest(action, payload);
+        if (result && result.success) {
+            showToast(result.message || 'Notice saved successfully!', 'success');
+            closeModal('noticeModal');
+            await loadAllData();
+            loadAdminNotices();
+            loadFeed();
+            playSuccess();
+        } else {
+            showToast(result?.message || 'Failed to save notice', 'error');
+            playFailure();
+        }
+    } catch (error) {
+        showToast('Error: ' + error.message, 'error');
+        playFailure();
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
+
+// Delete notice
+async function deleteNotice(noticeId) {
+    const result = await Swal.fire({
+        title: 'Delete Notice?',
+        text: "This action cannot be undone! All likes and comments will also be removed.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    });
+    
+    if (result.isConfirmed) {
+        try {
+            const response = await apiRequest('deleteNotice', { noticeId: noticeId, userId: currentUser?.id });
+            if (response && response.success) {
+                showToast('Notice deleted successfully', 'success');
+                await loadAllData();
+                loadAdminNotices();
+                loadFeed();
+                playSuccess();
+            } else {
+                showToast(response?.message || 'Failed to delete notice', 'error');
+                playFailure();
+            }
+        } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+            playFailure();
+        }
+    }
+}
+
+function openCategoryModal(category = null) {
+    document.getElementById('categoryForm').reset();
+    document.getElementById('categoryId').value = '';
+    document.getElementById('cat_icon').value = 'bx bx-category';
+    document.getElementById('cat_color').value = '#667eea';
+    document.getElementById('cat_status').value = 'active';
+    
+    if (category) {
+        document.getElementById('categoryId').value = category.category_id;
+        // Apply decodeText to remove + signs
+        document.getElementById('cat_name_np').value = decodeText(category.name_np || '');
+        document.getElementById('cat_name_en').value = decodeText(category.name_en || '');
+        document.getElementById('cat_icon').value = category.icon || 'bx bx-category';
+        document.getElementById('cat_color').value = category.color || '#667eea';
+        document.getElementById('cat_status').value = category.status || 'active';
+    }
+    
+    document.getElementById('categoryModal').classList.add('active');
+}
+
+function editCategory(categoryId) {
+    const category = cachedData.categories.find(c => c.category_id.toString() === categoryId.toString());
+    if (category) {
+        // Decode text fields to convert + back to spaces
+        openCategoryModal({
+            ...category,
+            name_np: decodeText(category.name_np || ''),
+            name_en: decodeText(category.name_en || '')
+        });
+    } else {
+        showToast('Category not found', 'error');
+    }
+}
+
+// Save category (create or update)
+async function saveCategory(event) {
+    event.preventDefault();    
+    const categoryId = document.getElementById('categoryId').value;
+    const name_np = document.getElementById('cat_name_np').value.trim();
+    const name_en = document.getElementById('cat_name_en').value.trim();
+    const icon = document.getElementById('cat_icon').value.trim();
+    const color = document.getElementById('cat_color').value;
+    const status = document.getElementById('cat_status').value;    
+    if (!name_np || !name_en) {
+        showToast('Category names are required', 'error');
+        return;
+    }    
+    const action = categoryId ? 'updateCategory' : 'createCategory';
+    const payload = {
+        categoryId: categoryId,
+        name_np: decodeText(name_np),
+        name_en: decodeText(name_en),
+        icon: icon,
+        color: color,
+        status: status,
+        userId: currentUser?.id
+    };    
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Saving...';
+    btn.disabled = true;    
+    try {
+        const result = await apiRequest(action, payload);
+        if (result && result.success) {
+            showToast(result.message || 'Category saved successfully!', 'success');
+            closeModal('categoryModal');
+            await loadAllData();
+            loadAdminCategories();
+            loadStories();
+            playSuccess();
+        } else {
+            showToast(result?.message || 'Failed to save category', 'error');
+            playFailure();
+        }
+    } catch (error) {
+        showToast('Error: ' + error.message, 'error');
+        playFailure();
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+}
+// Delete category
+async function deleteCategory(categoryId) {
+    const result = await Swal.fire({
+        title: 'Delete Category?',
+        text: "Notices in this category will become uncategorized. This action cannot be undone.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e74c3c',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    });
+    
+    if (result.isConfirmed) {
+        try {
+            const response = await apiRequest('deleteCategory', { categoryId: categoryId, userId: currentUser?.id });
+            if (response && response.success) {
+                showToast('Category deleted successfully', 'success');
+                await loadAllData();
+                loadAdminCategories();
+                loadStories();
+                playSuccess();
+            } else {
+                showToast(response?.message || 'Failed to delete category', 'error');
+                playFailure();
+            }
+        } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+            playFailure();
+        }
+    }
+}
+
+// Close modal helper
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+      
+      function logout() { Swal.fire({ title: 'Logout?', text: 'Are you sure you want to logout?', icon: 'question', showCancelButton: true, confirmButtonText: 'Yes' }).then((res) => { if (res.isConfirmed) { clearSession(); playSuccess(); showToast('Logged out', 'success'); loadAllData().then(() => { loadFeed(); showSection('home'); window.location.hash = ''; }); } }); }
+      
+      function showToast(message, type) { const toast = document.createElement('div'); toast.className = `toast ${type}`; toast.textContent = message; document.getElementById('toastContainer').appendChild(toast); setTimeout(() => toast.classList.add('show'), 10); setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 2000); }
+        document.addEventListener('input', function(e) { if (e.target.classList.contains('comment-input')) { e.target.style.height = 'auto'; e.target.style.height = (e.target.scrollHeight) + 'px'; } });
+    </script>
