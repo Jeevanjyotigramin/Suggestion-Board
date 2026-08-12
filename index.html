@@ -1,4 +1,10 @@
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Print Table · Unique Date Filter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -1308,6 +1314,8 @@
           }
         }
     </style>
+	</head>
+	<body>
     <nav class="menu">
         <a href="#" class="logo" onclick="showSection('home')">
     <img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="35" height="35">
@@ -3243,3 +3251,5 @@ function closeModal(modalId) {
       function showToast(message, type) { const toast = document.createElement('div'); toast.className = `toast ${type}`; toast.textContent = message; document.getElementById('toastContainer').appendChild(toast); setTimeout(() => toast.classList.add('show'), 10); setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 2000); }
         document.addEventListener('input', function(e) { if (e.target.classList.contains('comment-input')) { e.target.style.height = 'auto'; e.target.style.height = (e.target.scrollHeight) + 'px'; } });
     </script>
+	</body>
+</html>
