@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>जीवन ज्योती — सूचना पाटी</title>
+
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <style>
     * {
         margin: 0;
@@ -15,6 +17,7 @@
         box-sizing: border-box;
         font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     }
+
     :root {
         --primary: #667eea;
         --secondary: #764ba2;
@@ -30,6 +33,7 @@
         --gradient-color-bg: linear-gradient(180deg, rgba(247, 1, 120, 1) 0%, rgba(160, 8, 156, 1) 51%, rgba(99, 13, 178, 1) 100%);
         --transition-smooth: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
+
     body.print-mode nav.menu,
     body.print-mode .menu,
     body.print-mode .modal,
@@ -44,11 +48,13 @@
     body.print-mode .stories {
         display: none !important;
     }
+
     body.print-mode {
         background: #fff !important;
         margin: 0 !important;
         padding: 0 !important;
     }
+
     body.print-mode .printable-bill {
         display: block !important;
         visibility: visible !important;
@@ -58,6 +64,7 @@
         border: none !important;
         max-width: 100% !important;
     }
+
     body.print-mode .printable-bill table { display: table !important; }
     body.print-mode .printable-bill thead { display: table-header-group !important; }
     body.print-mode .printable-bill tbody { display: table-row-group !important; }
@@ -70,6 +77,7 @@
         color: var(--text-primary);
         overflow-x: hidden;
     }
+
     .bill-actions {
         display: flex;
         gap: 10px;
@@ -77,6 +85,7 @@
         margin-bottom: 20px;
         flex-wrap: wrap;
     }
+
     .print-bill-btn,
     .download-bill-btn {
         padding: 10px 20px;
@@ -90,14 +99,17 @@
         align-items: center;
         gap: 5px;
     }
+
     .print-bill-btn {
         background: #28a745;
         color: white;
     }
+
     .print-bill-btn:hover {
         background: #218838;
         transform: translateY(-2px);
     }
+
     .download-bill-btn {
         background: #007bff;
         color: white;
@@ -272,6 +284,7 @@
     .terms-section {
         font-size: 11px;
         color: #666;
+        flex: 1;
     }
 
     .terms-section ul {
@@ -285,7 +298,7 @@
     }
 
     .auto-dotted-underline {
-        border-bottom: 1px dotted #000;
+        border-bottom: 2px dotted #000;
         padding-bottom: 2px;
         display: inline-block;
         position: relative;
@@ -333,7 +346,6 @@
             text-align: center;
             margin-top: 10px;
         }
-        .bill-footer { flex-direction: column; }
         .signature-section {
             margin-top: 20px;
             width: 100%;
@@ -1812,7 +1824,6 @@
         }
         return false;
     }
-
     function updateUserUI() {
         const guestView = document.getElementById('guestView');
         const userView = document.getElementById('userView');
@@ -1943,10 +1954,6 @@
     if (progress) {
         progress.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
-
-    /* ══════════════════════════════════════════════
-       BILL FUNCTIONS
-       ══════════════════════════════════════════════ */
     async function showBillData() {
         const contentDiv = document.getElementById('billdataContainer');
         if (!currentUser) {
@@ -1954,7 +1961,6 @@
             return;
         }
         contentDiv.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
-        try {
             const result = await apiRequest('getUserAdditionalData', { userId: currentUser.id });
             if (result && result.success) {
                 const data = result.additionalData;
@@ -2074,11 +2080,8 @@
             } else {
                 contentDiv.innerHTML = '<div class="empty-state">Failed to load additional data</div>';
             }
-        } catch (error) {
-            contentDiv.innerHTML = '<div class="empty-state">Error loading data</div>';
         }
-    }
-
+   
     function printBill(billId) {
         const billElement = document.getElementById(billId);
         if (!billElement) return;
