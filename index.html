@@ -283,7 +283,6 @@
     .terms-section {
         font-size: 11px;
         color: #666;
-        flex: 1;
     }
 
     .terms-section ul {
@@ -1971,7 +1970,7 @@
                             <button class="print-bill-btn" onclick="printBill('${billId}')">
                                 <i class="print-icon">🖨️</i> Print Bill
                             </button>
-                            <button class="download-bill-btn" onclick="downloadBillAsPDF('${billId}')">
+                            <button class="download-bill-btn" onclick="downloadBillAsPDF('billContainer', this)")">
                                 <i class="download-icon">📄</i> Download as PDF
                             </button>
                         </div>
@@ -2108,45 +2107,66 @@
         return /Android/i.test(navigator.userAgent);
     }
 
-    async function downloadBillAsPDF(billId) {
-        const billElement = document.getElementById(billId);
-        if (!billElement) {
-            showToast('Bill element not found!', 'error');
-            return;
+    async function downloadBillAsPDF(billId, buttonElement) {
+    const billElement = document.getElementById(billId);
+    if (!billElement) {
+        showToast('Bill element not found!', 'error');
+        return;
+    }
+    const originalText = buttonElement ? buttonElement.innerHTML : '';
+
+    if (buttonElement) {
+        buttonElement.innerHTML = 'Downloading...';
+        buttonElement.disabled = true;
+    }
+
+    const cosid = currentUser?.citizenship_no || 'bill';
+    showToast('Generating PDF...', 'info');
+    try {
+        if (typeof html2pdf === 'undefined') {
+            await loadHtml2Pdf();
         }
-        const cosid = currentUser?.citizenship_no || 'bill';
-        showToast('Generating PDF...', 'info');
-        try {
-            if (typeof html2pdf === 'undefined') {
-                await loadHtml2Pdf();
+        const opt = {
+            margin: [0.2, 0.2, 0.2, 0.2],
+            filename: `${cosid}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                letterRendering: true,
+                useCORS: true
+            },
+            jsPDF: {
+                unit: 'in',
+                format: 'a4',
+                orientation: 'portrait'
             }
-            const opt = {
-                margin: [0.2, 0.2, 0.2, 0.2],
-                filename: `${cosid}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, letterRendering: true, useCORS: true },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-            const pdf = await html2pdf().set(opt).from(billElement).output('datauristring');
-            if (isAndroidWebView()) {
-                if (window.AndroidInterface) {
-                    window.AndroidInterface.downloadPDF(pdf, `${cosid}.pdf`);
-                    showToast('PDF download started!', 'success');
-                } else if (window.Android && window.Android.downloadPDF) {
-                    window.Android.downloadPDF(pdf, `${cosid}.pdf`);
-                    showToast('PDF download started!', 'success');
-                } else {
-                    downloadPDFFallback(pdf, `${cosid}.pdf`);
-                }
+        };
+        const pdf = await html2pdf()
+            .set(opt)
+            .from(billElement)
+            .output('datauristring');
+        if (isAndroidWebView()) {
+            if (window.AndroidInterface) {
+                window.AndroidInterface.downloadPDF(pdf, `${cosid}.pdf`);
+            } else if (window.Android && window.Android.downloadPDF) {
+                window.Android.downloadPDF(pdf, `${cosid}.pdf`);
             } else {
                 downloadPDFFallback(pdf, `${cosid}.pdf`);
-                showToast('PDF downloaded successfully!', 'success');
             }
-        } catch (error) {
-            console.error('PDF generation error:', error);
-            showToast('Failed to generate PDF. Please try printing instead.', 'error');
+        } else {
+            downloadPDFFallback(pdf, `${cosid}.pdf`);
+        }
+        showToast('PDF downloaded successfully!', 'success');
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        showToast('Failed to generate PDF. Please try printing instead.', 'error');
+    } finally {
+        if (buttonElement) {
+            buttonElement.innerHTML = originalText;
+            buttonElement.disabled = false;
         }
     }
+}
 
     function downloadPDFFallback(dataUrl, filename) {
         const link = document.createElement('a');
