@@ -1959,7 +1959,7 @@
                 const date = new Date();
                 const currentDate = formatDateTime(date);
                 const billId = 'bill_' + Date.now();
-                const cosname = currentUser?.name || 'SYSTEM';
+                const cosname = (currentUser && currentUser.role === 'admin') ? currentUser.name : '';
                 const billHTML = `
                     <div class="printable-bill-wrapper">
                         <div class="bill-actions">
