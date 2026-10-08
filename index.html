@@ -1285,17 +1285,11 @@
                 <i class="bx bx-search nav-icon" onclick="toggleSearch()">
                     <span class="nav-text">Search</span>
                 </i>
-                <i class="bx bx-pencil nav-icon" onclick="showSettings()">
-                    <span class="nav-text">Settings</span>
-                </i>
                 <i class="bx bx-file-blank nav-icon" onclick="showBill()">
                     <span class="nav-text">Show Bill</span>
                 </i>
                 <i class="bx bx-heart nav-icon" onclick="showSection('liked')">
                     <span class="nav-text">Liked</span>
-                </i>
-                <i class="bx bx-globe nav-icon" onclick="toggleLanguage()">
-                    <span class="nav-text">Language</span>
                 </i>
             </div>
             <div class="user-auth" id="userAuth">
@@ -2860,6 +2854,7 @@
     function showBill() {
         showSection('billdata');
         document.getElementById('userDropdown').classList.remove('show');
+        if (!currentUser) { showLoginForm(); return; }
         if (currentUser) { showBillData(); }
     }
 
