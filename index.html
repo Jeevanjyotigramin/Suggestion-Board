@@ -1627,7 +1627,7 @@
                 <button class="close-modal" onclick="closeAdditionalDataModal()">×</button>
             </div>
             <div class="modal-body" id="additionalDataContent">
-                <div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>
+                <div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><br><div class="spinner"></div></div>
             </div>
         </div>
     </div>
@@ -1774,6 +1774,7 @@
             <img alt="logo" loading="lazy" 
                  src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" 
                  width="100" height="100">
+                 <br>
             <div class="spinner"></div>
         </div>`;
         loadInitialData();
@@ -1952,7 +1953,7 @@
            showLoginForm();
             return;
         }
-        contentDiv.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
+        contentDiv.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><br><div class="spinner"></div></div>';
         try {
             const result = await apiRequest('getUserAdditionalData', { userId: currentUser.id });
             if (result && result.success) {
@@ -2504,7 +2505,7 @@
    
 async function loadFeed() {
       const container = document.getElementById('feedContainer');
-      container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
+      container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><br><div class="spinner"></div></div>';
           if (!dataLoaded || !cachedData.notices || cachedData.notices.length === 0) {
               const loaded = await loadAllData();
               if (!loaded) {
@@ -2668,7 +2669,7 @@ async function loadFeed() {
     function displayFeed(notices) {
     const container = document.getElementById('feedContainer');
        if (!dataLoaded) {
-        container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
+        container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><br><div class="spinner"></div></div>';
         return;
    }
     if (!notices || notices.length === 0) {
@@ -2859,7 +2860,7 @@ async function loadFeed() {
     function loadLikedNotices() {
         const container = document.getElementById('likedContainer');
         if (!currentUser) { container.innerHTML = '<div class="empty-state">Please login to view liked notices</div>'; return; }
-        container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
+        container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><br><div class="spinner"></div></div>';
         setTimeout(() => {
             const likedIds = new Set();
             cachedData.likes.forEach(l => { if (l.user_id === currentUser.id && l.status === 'active') likedIds.add(l.notice_id.toString()); });
