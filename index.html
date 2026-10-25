@@ -1279,9 +1279,6 @@
         </a>
         <div class="nav-controls">
             <div class="nav-icons">
-                <i class="bx bx-home nav-icon" onclick="showSection('home')">
-                    <span class="nav-text">Home</span>
-                </i>
                 <i class="bx bx-search nav-icon" onclick="toggleSearch()">
                     <span class="nav-text">Search</span>
                 </i>
@@ -1943,6 +1940,7 @@
         const contentDiv = document.getElementById('billdataContainer');
         if (!currentUser) {
             contentDiv.innerHTML = '<div class="empty-state">Please login to view Own Bill</div>';
+           showLoginForm();
             return;
         }
         contentDiv.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
@@ -2653,6 +2651,7 @@
 
     function displayFeed(notices) {
         const container = document.getElementById('feedContainer');
+        container.innerHTML = '<div class="loading"><img alt="logo" loading="lazy" src="https://raw.githubusercontent.com/Jeevanjyotigramin/Jeevanjyoti/refs/heads/main/img/logo.png" width="100" height="100"><div class="spinner"></div></div>';
         if (notices.length === 0) { container.innerHTML = '<div class="empty-state">No notices available</div>'; return; }
         let html = '';
         notices.forEach(n => { html += generateNoticeHTML(n); });
